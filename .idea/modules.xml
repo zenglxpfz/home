@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/home/home.iml" filepath="$PROJECT_DIR$/home/home.iml" />
+      <module fileurl="file://$PROJECT_DIR$/home/movehome/movehome.iml" filepath="$PROJECT_DIR$/home/movehome/movehome.iml" />
+      <module fileurl="file://$PROJECT_DIR$/home/movehome/movehome-common/movehome-common.iml" filepath="$PROJECT_DIR$/home/movehome/movehome-common/movehome-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/home/movehome/movehome-data/movehome-data.iml" filepath="$PROJECT_DIR$/home/movehome/movehome-data/movehome-data.iml" />
+      <module fileurl="file://$PROJECT_DIR$/home/movehome/movehome-interface/movehome-interface.iml" filepath="$PROJECT_DIR$/home/movehome/movehome-interface/movehome-interface.iml" />
+      <module fileurl="file://$PROJECT_DIR$/home/movehome/movehome-service/movehome-service.iml" filepath="$PROJECT_DIR$/home/movehome/movehome-service/movehome-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/home/movehome-start/movehome-start.iml" filepath="$PROJECT_DIR$/home/movehome-start/movehome-start.iml" />
+      <module fileurl="file://$PROJECT_DIR$/home/movehome/movehome-web/movehome-web.iml" filepath="$PROJECT_DIR$/home/movehome/movehome-web/movehome-web.iml" />
+    </modules>
+  </component>
+</project>

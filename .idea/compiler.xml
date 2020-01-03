@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="movehome-common" />
+        <module name="movehome-data" />
+        <module name="movehome-interface" />
+        <module name="movehome-service" />
+        <module name="movehome-start" />
+        <module name="movehome-web" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="home" target="1.7" />
+      <module name="movehome-common" target="1.7" />
+      <module name="movehome-data" target="1.7" />
+      <module name="movehome-interface" target="1.7" />
+      <module name="movehome-service" target="1.7" />
+      <module name="movehome-start" target="1.8" />
+      <module name="movehome-web" target="1.7" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="movehome-start" options="-parameters" />
+    </option>
+  </component>
+</project>
