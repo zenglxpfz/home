@@ -2,6 +2,7 @@ package com.zyq.movehome.serviceImpl;
 
 
 import com.zyq.movehome.dto.TestGetDTO;
+
 import com.zyq.movehome.mapper.TestMapper;
 import com.zyq.movehome.service.TestService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +19,22 @@ import java.util.List;
  * @time: 2019/12/30 - 17:52
  */
 @Service
-public class TestServiceImpl implements TestService {
+public class TestServiceImpl implements TestService
+{
+
 
     @Resource
     private TestMapper testMapper;
+
+
     @Override
     public List<TestGetDTO> get() {
         return testMapper.get();
+
     }
+
+
+//   // public List<TestGetDTO> select() {
+//        return deptMapper.select();
+//    }
 }

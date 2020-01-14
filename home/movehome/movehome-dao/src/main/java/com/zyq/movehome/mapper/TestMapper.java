@@ -2,6 +2,7 @@ package com.zyq.movehome.mapper;
 
 import com.zyq.movehome.dto.TestGetDTO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -9,10 +10,10 @@ import java.util.List;
  * @program:
  * @description:
  * @author: ZengYunQi
- * @time: 2019/12/30 - 22:56
+ * @time: 2020/1/14 - 19:14
  */
 @Mapper
 public interface TestMapper {
-
-   public List<TestGetDTO> get();
+    @Select("select * from dept")
+    public List<TestGetDTO> get();
 }
