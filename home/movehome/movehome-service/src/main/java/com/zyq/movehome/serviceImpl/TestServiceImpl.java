@@ -5,6 +5,7 @@ import com.zyq.movehome.dto.TestGetDTO;
 
 import com.zyq.movehome.mapper.TestMapper;
 import com.zyq.movehome.service.TestService;
+import jdk.nashorn.internal.runtime.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,9 @@ import java.util.List;
 public class TestServiceImpl implements TestService
 {
 
+   // org.slf4j.Logger logger;
+
+
 
     @Resource
     private TestMapper testMapper;
@@ -33,8 +37,14 @@ public class TestServiceImpl implements TestService
 
     }
 
+    @Logger
+    @Override
+    public TestGetDTO selectone(Integer deptId){
 
-//   // public List<TestGetDTO> select() {
-//        return deptMapper.select();
-//    }
+       // logger.info("执行成功");
+        return testMapper.selectone(deptId);
+    }
+
+
+
 }

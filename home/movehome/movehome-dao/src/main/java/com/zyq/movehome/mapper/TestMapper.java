@@ -14,6 +14,8 @@ import java.util.List;
  */
 @Mapper
 public interface TestMapper {
-    @Select("select * from dept")
+    //@Select("select * from dept")
     public List<TestGetDTO> get();
+
+    public TestGetDTO selectone(Integer deptId);
 }
