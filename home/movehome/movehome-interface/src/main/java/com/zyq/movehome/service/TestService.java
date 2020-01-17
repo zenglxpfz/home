@@ -11,6 +11,6 @@ import java.util.List;
 public interface TestService {
     List<TestGetDTO> get();
 
-   TestGetDTO selectone(Integer deptId);
+    TestGetDTO selectone(Integer deptId);
 
 }

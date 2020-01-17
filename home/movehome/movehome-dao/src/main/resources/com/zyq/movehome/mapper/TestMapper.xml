@@ -1,12 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zyq.movehome.mapper.TestMapper">
- <select id="get" resultType="com.zyq.movehome.dto.TestGetDTO">
-     select * from dept
+
+    <resultMap id="DeptMap" type="com.zyq.movehome.dto.TestGetDTO">
+        <result column="dept_id" property="deptId"></result>
+    </resultMap>
+
+    <sql id="DeptParam">
+        dept_id,
+        dept_name
+    </sql>
+    <select id="get" resultType="com.zyq.movehome.dto.TestGetDTO">
+        select
+        <include refid="DeptParam"></include>
+         from dept
  </select>
 
     <select id="selectone" parameterType="Integer" resultType="com.zyq.movehome.dto.TestGetDTO">
-     select dept_id ,dept_name from dept where dept_id=#{0}
+     select dept_id ,dept_name from dept where 1=1
+      <if test="deptId != null and deptId !=''">
+         and dept_id=#{deptId}
+
+      </if>
+
  </select>
 
 </mapper>

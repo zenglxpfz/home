@@ -1,16 +1,16 @@
 package com.zyq.movehome.controller;
 
+import com.zyq.movehome.common.MsgResult;
 import com.zyq.movehome.dto.TestGetDTO;
 import com.zyq.movehome.service.TestService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletRequest;
-import javax.servlet.http.HttpSession;
-import java.util.List;
 
 /**
  * @program:
@@ -18,7 +18,9 @@ import java.util.List;
  * @author: ZengYunQi
  * @time: 2019/12/30 - 17:35
  */
-@Controller
+@RestController
+@Api(description = "测试赛所所")
+@RequestMapping("/test")
 public class TestController {
 
     @Autowired
@@ -26,8 +28,6 @@ public class TestController {
 
     @Autowired
     RedisTemplate redisTemplate;
-
-
 
 //    @RequestMapping(value = "/test")
 //    public List<TestGetDTO> test(){
@@ -37,22 +37,28 @@ public class TestController {
 //        return list;
 //    }
 
-    @RequestMapping(value = "/g")
-    public String  select(ServletRequest request){
+    @ApiOperation(value = "测试接口", notes = "对项目进行测试")
+//    @ApiImplicitParams({
+//            @ApiImplicitParam(name="id",value = "用户id",required = true,dataType = "Integer"),
+//            @ApiImplicitParam(name = "name",value = "用户名",required = true,dataType = "String")
+//    })
+    @RequestMapping(value = "/g", method = RequestMethod.GET)
+    public MsgResult<Boolean> select(ServletRequest request) {
 
-        TestGetDTO  a = testService.selectone(1);
-        redisTemplate.opsForList().leftPush("user1",a);
+        TestGetDTO a = testService.selectone(1);
+        redisTemplate.opsForList().leftPush("user1", a);
 
-        request.setAttribute("user",a);
+        request.setAttribute("user", a);
         System.out.println(redisTemplate.opsForList().leftPop("user1"));
-        return "test";
+        return MsgResult.success(true).add("a", "b").add("c", "d");
     }
 
-    @RequestMapping("/login")
-    public String  selecta(Model model){
+    @ApiOperation(value = "登录测试", notes = "对登录进行测试")
+    @GetMapping("/login")
+    public String selecta(Model model, TestGetDTO dto) {
 
         //TestGetDTO  a = testService.selectone(1);
-        model.addAttribute("user","he");
+        model.addAttribute("user", "he");
         //System.out.println();
         return "test";
     }
