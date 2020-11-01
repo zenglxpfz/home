@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zyq.movehome.mapper.ContentMapper" >
+  <resultMap id="BaseResultMap" type="com.zyq.movehome.dto.ContentDTO" >
+    <id column="CID" property="cid" jdbcType="INTEGER" />
+    <result column="CRULES" property="crules" jdbcType="VARCHAR" />
+    <result column="TID" property="tid" jdbcType="INTEGER" />
+    <result column="CREATETIME" property="createtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    CID, CRULES, TID, CREATETIME
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from content
+    where CID = #{cid,jdbcType=INTEGER}
+  </select>
+  <select id="selectByTid" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from content
+    where TID = #{tid,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectPage" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from content
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from content
+    where CID = #{cid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.zyq.movehome.dto.ContentNewDTO" >
+    insert into content (CID, CRULES, TID, 
+      CREATETIME)
+    values (#{cid,jdbcType=INTEGER}, #{crules,jdbcType=VARCHAR}, #{tid,jdbcType=INTEGER}, 
+      #{createtime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zyq.movehome.dto.ContentNewDTO" >
+    insert into content
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="cid != null" >
+        CID,
+      </if>
+      <if test="crules != null" >
+        CRULES,
+      </if>
+      <if test="tid != null" >
+        TID,
+      </if>
+      <if test="createtime != null" >
+        CREATETIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="cid != null" >
+        #{cid,jdbcType=INTEGER},
+      </if>
+      <if test="crules != null" >
+        #{crules,jdbcType=VARCHAR},
+      </if>
+      <if test="tid != null" >
+        #{tid,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zyq.movehome.dto.ContentDTO" >
+    update content
+    <set >
+      <if test="crules != null" >
+        CRULES = #{crules,jdbcType=VARCHAR},
+      </if>
+      <if test="tid != null" >
+        TID = #{tid,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        CREATETIME = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where CID = #{cid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zyq.movehome.dto.ContentDTO" >
+    update content
+    set CRULES = #{crules,jdbcType=VARCHAR},
+      TID = #{tid,jdbcType=INTEGER},
+      CREATETIME = #{createtime,jdbcType=TIMESTAMP}
+    where CID = #{cid,jdbcType=INTEGER}
+  </update>
+</mapper>

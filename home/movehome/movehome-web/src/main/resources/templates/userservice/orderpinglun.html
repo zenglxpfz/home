@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>About</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <meta name="keywords" content=""/>
+
+    <script type="application/x-javascript">
+        addEventListener("load", function () {
+            setTimeout(hideURLbar, 0);
+        }, false);
+
+        function hideURLbar() {
+            window.scrollTo(0, 1);
+        }
+    </script>
+    <link rel="stylesheet" href="/css/bootstrap.css"> <!-- Bootstrap-Core-CSS -->
+    <link href="/css/style.css" rel='stylesheet' type='text/css'/>
+    <link href="/css/fontawesome-all.css" rel="stylesheet">
+    <link href="http://fonts.googleapis.com/css?family=Exo+2" rel="stylesheet">
+    <link href="http://fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i"
+          rel="stylesheet">
+    <!--	描述：elm -->
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="https://cdn.staticfile.org/axios/0.18.0/axios.min.js"></script>
+    <script src="base/plugins/jquery/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="base/dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="base/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <link rel="stylesheet" href="/css/common.css">
+    <!--elm  -->
+</head>
+
+<body>
+<header>
+    <div class="header">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="index.html">同城搬家供需信息交流平台</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item ">
+                        <a class="nav-link" href="/main">首页<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item  active">
+                        <a class="nav-link" href="/order">我的订单</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/moveteam">寻找搬家团队</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/mymessage">我的留言</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link " href="/forteam/notice">告示</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span th:if=" ${session.user} ne null" th:text="${session.user.uname}"></span>
+                            <span th:if="${session.user} eq null " th:text="请登录"></span>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" th:if="${session.user} ne null" href="/loginup">
+                                <span th:if="${session.user} ne null " th:text="注销"></span>
+                            </a>
+                            <a class="dropdown-item" th:if="${session.user} eq null " href="/">
+                                <span th:if="${session.user} eq null " th:text="登录"></span>
+                            </a>
+                            <a href="#" class="dropdown-item" data-toggle="modal" data-target="#persionmessage"
+                               role="button">查看个人信息</a>
+                            <a href="#" class="dropdown-item" data-toggle="modal" data-target="#editmessage"
+                               role="button">编辑个人信息</a>
+                        </div>
+                    </li>
+                </ul>
+
+            </div>
+        </nav>
+    </div>
+</header>
+
+
+<input type="hidden" th:if="${session.user} ne null" id="myuname" th:value="${session.user.uname}">
+<input type="hidden" th:if="${session.order} ne null" id="orderid" th:value="${session.order.oid}">
+<input type="hidden" th:if="${session.order} ne null" id="tname" th:value="${session.order.tname}">
+
+<div class="w3-head-all text-center mb-5">
+    <h3>订单详情</h3>
+</div>
+<div class="row" style="height:auto; width: 100%;padding: 0px 20px 0px">
+    <div id="order" style="width: 100%;padding: 0px 20px 0px">
+
+        <template>
+            <el-table class="tableBox"
+                      :data="order"
+                      style="width: 100%"
+                      :row-style="{height: '200px'}">
+                <el-table-column
+                        prop=""
+                        label=""
+                        width="100">
+                    <span style="font-size: x-large;">{{order[0].uname}}</span>
+                </el-table-column>
+                <el-table-column
+                        prop="name"
+                        label=""
+                        width="300">
+                    <template slot-scope="scope">
+                        <h6>订单号：{{scope.row.oid}}</h6>
+                        <h6>下单时间：{{scope.row.createtime}}</h6>
+
+                        <span>从</span><span style="color: red;">{{scope.row.mbegin}}</span><span>搬到</span>
+                        <span style="color: red;">{{scope.row.mend}}</span>
+                        <div class="nodataTip">
+                            <span>备注：</span><span>{{scope.row.mattention}}</span>
+
+                        </div>
+                    </template>
+                    　
+                </el-table-column>
+                <el-table-column
+                        prop="address"
+                        label="">
+                    <template slot-scope="scope">
+                        <span style="font-size: 17px;">订单金额: </span><span style="font-size: 17px;">{{scope.row.amount}}</span>元<br/>
+                        <span style="font-size: 17px;">支付方式: </span><span style="font-size: 17px;">{{scope.row.payfor}}</span><br/>
+                        <span style="font-size: 17px;" v-if="scope.row.status=='2'">完成时间：</span><span style="color: blue;font-size: 17px;">{{scope.row.finishtime}}</span>
+                        <span style="font-size: 17px;" v-else>预计开始时间：</span><span style="color: red;font-size: 17px;">{{scope.row.mtime}}</span>
+
+                        <div class="nodataTip">
+                        </div>
+                    </template>
+                    　
+                </el-table-column>
+                <el-table-column
+                        prop=""
+                        label="">
+
+                    <template slot-scope="scope">
+                        <span style="color: red" v-if="scope.row.status=='0'">待接单</span>
+                        <span style="color: green" v-else-if="scope.row.status=='1'">已接单-待完成</span>
+                        <span style="color: #00bbff" v-else-if="scope.row.status=='2'">已完成</span>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </template>
+        <hr/>
+        <span>评论区：</span>
+        <hr/>
+        <div>
+            <div style="height: auto;width: 100%;" v-for="(o, index) in pinglun" :key="o" :offset="index > 0 ? 1 : 0">
+
+                <div class="row" style="padding: 30px">
+                    <div class="col-3-md">
+                        <h5  style="font-size: 20px;">{{o.uname}}</h5>
+                        <span style="font-size: 15px;">{{o.createtime}}</span><br/>
+
+                        <span>{{o.content}}</span>
+                    </div>
+                    <div class="col-3-md ">
+                        <span>{{o.scoring}}</span><br/><br/>
+                        <span  style="font-size: 15px;">{{o.time}}</span>
+
+                    </div>
+                    <div class="col-3-md col-md-offset-3">
+
+                        <button  type="button" @click="del(o)">删除</button>
+
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="col-md-8">
+                        <el-collapse v-model="activeNames" @change="handleChange">
+                            <el-collapse-item title="查看回复" name="4">
+                                <div style="height: auto;">
+
+                                    <div v-for="(h, index1) in o.huifuplDTOS" :key="a" :offset="index > 0 ? 1 : 0">
+                                        <div class="row">
+                                            <div class="col-md-10">
+                                        <a href="javascript:void(0);" @click="x(h,index)">{{h.username}}</a>回复
+                                        <a href="javascript:void(0);" @click="y(h,index)">{{h.useredname}}</a>：{{h.content}}
+
+                                            <span>{{h.createtime}}</span><br/>
+                                                <p>
+                                                    {{h.time}}
+                                                </p>
+
+                                            </div>
+                                            <div class="col-md-2 " style="padding: 20px">
+                                        <button type="button" th:class="btn-danger">删除</button>
+                                            </div>
+                                        </div>
+                                        <br />
+                                        <!--<el-button @click="dialogVisible = true">回复</el-button>-->
+                                    </div>
+                                    <!--<input v-model="a.name" />-->
+                                    <!--<input v-model="a.hu" :placeholder="'回复'" +{{a.name}}/>-->
+                                    <input v-model="a[index].content" :placeholder="'回复'+a[index].name"/>
+                                    <button @click="re(index)">回复</button>
+
+                                    <!--<el-form ref="form" :model="huiful"class="form-inline my-2 my-lg-0">-->
+                                    <!--<el-form-item label="">-->
+                                    <!--<el-input v-model="sou.tname" class="form-control mr-sm-2" type="search" placeholder="请输入信息查询团队" aria-label="Search"></el-input>-->
+                                    <!--</el-form-item>-->
+                                    <!--&lt;!&ndash;<el-button  @click="x()">回复</el-button>&ndash;&gt;-->
+                                    <!--</el-form>-->
+
+                                    <!--<div>您回复团队：来了<button type="button">回复</button></div>-->
+                                </div>
+                            </el-collapse-item>
+                        </el-collapse>
+                    </div>
+                </div>
+
+            </div>
+<!--           // <el-divider><i class="el-icon-mobile-phone"></i></el-divider>-->
+            <br/>
+        </div>
+
+        <!--<el-dialog-->
+
+        <!--title="12323"-->
+        <!--:visible.sync="dialogVisible"-->
+        <!--width="30%"-->
+        <!--:before-close="handleClose">-->
+
+        <!--<span slot="footer" class="dialog-footer">-->
+        <!--<el-button @click="dialogVisible = false">取 消</el-button>-->
+        <!--<el-button type="primary" @click="dialogVisible = false">确 定</el-button>-->
+        <!--</span>-->
+        <!--</el-dialog>-->
+        <!--抽屉-->
+        <el-drawer
+                title="请给订单评分 !"
+                :before-close="handleClose"
+                :visible.sync="dialog"
+                direction="ltr"
+                custom-class="demo-drawer"
+                ref="drawer"
+        >
+            <input v-model="a"/>
+            <div class="demo-drawer__content" style="height: 30%;">
+                <el-form :model="pinglun">
+
+                    <el-form-item label="订单编号:" :label-width="formLabelWidth">
+                        <el-input v-model="pinglun.oid" autocomplete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="团队名称:" :label-width="formLabelWidth">
+                        <el-input v-model="pinglun.tname" autocomplete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="评论:" :label-width="formLabelWidth">
+                        <el-input v-model="pinglun.content" autocomplete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="评分:" :label-width="formLabelWidth">
+                        <el-select v-model="pinglun.scoring" placeholder="请评分，最高分5分">
+                            <el-option label="1分" value="1分"></el-option>
+                            <el-option label="2分" value="2分"></el-option>
+                            <el-option label="3分" value="3分"></el-option>
+                            <el-option label="4分" value="4分"></el-option>
+                            <el-option label="5分" value="5分"></el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-form>
+                <div class="demo-drawer__footer">
+                    <el-button @click="cancelForm">取 消</el-button>
+                    <el-button type="primary" @click="$refs.drawer.closeDrawer()" :loading="loading">{{ loading ?
+                        '提交中 ...' : '发布' }}
+                    </el-button>
+                </div>
+            </div>
+        </el-drawer>
+        <!--抽屉-->
+    </div>
+
+</div>
+
+
+<div class="footer-main">
+    <div class="footer-social">
+        <h4>关于平台</h4>
+        <ul>
+            <li>
+
+                <span class="fab fa-facebook-f icon_facebook"></span>
+                <p style="color: white;">服务范围为广东省广州市地区</p>
+
+            </li>
+
+        </ul>
+    </div>
+    <div class="cpy-right">
+        <p>2020-3-5 《同城搬家供需信息交流平台》平台联系人：曾运棋 联系电话：12345678910</p>
+    </div>
+</div>
+<!-- //footer -->
+<!-- odometer-script -->
+<script src="/js/odometer.js"></script>
+<script>
+    window.odometerOptions = {
+        format: '(ddd).dd'
+    };
+</script>
+<script>
+    setTimeout(function () {
+        jQuery('#w3l_stats1').html(25);
+    }, 1500);
+</script>
+<script>
+    setTimeout(function () {
+        jQuery('#w3l_stats2').html(330);
+    }, 1500);
+</script>
+<script>
+    setTimeout(function () {
+        jQuery('#w3l_stats3').html(542);
+    }, 1500);
+</script>
+<!-- //odometer-script -->
+
+<!-- js -->
+<script type="text/javascript" src="/js/jquery-2.2.3.min.js"></script>
+<script type="text/javascript" src="/js/bootstrap.js"></script> <!-- Necessary-JavaScript-File-For-Bootstrap -->
+<!-- //js -->
+<!-- start-smooth-scrolling -->
+<script src="/js/move-top.js"></script>
+<script src="/js/easing.js"></script>
+<script>
+    jQuery(document).ready(function ($) {
+        $(".scroll").click(function (event) {
+            event.preventDefault();
+
+            $('html,body').animate({
+                scrollTop: $(this.hash).offset().top
+            }, 1000);
+        });
+    });
+</script>
+<!-- //end-smooth-scrolling -->
+
+<!-- smooth-scrolling-of-move-up -->
+<script>
+    $(document).ready(function () {
+        $().UItoTop({
+            easingType: 'easeOutQuart'
+        });
+    });
+</script>
+<!-- //smooth-scrolling-of-move-up -->
+
+
+<!-- smooth scrolling js -->
+<script src="/js/SmoothScroll.min.js"></script>
+<!-- //smooth scrolling js -->
+<script>
+    new Vue({
+        el: '#app',
+        data: function () {
+            return {
+                form: {},
+            };
+        },
+        created() {
+            const that = this;
+            that.loan();
+        },
+        methods: {
+
+            loan() {
+//  	const that=this;
+                this.form = {
+                    uname: '曾运棋',
+                    sex: '1',
+                    email: '123@qq.com',
+                    identity: '4565564',
+                    phone: '12345648',
+                    birthday: '2020-14-2',
+                    signature: '你哈 ',
+                    address: '广州',
+                    registrationtime: '2020-02-30'
+                };
+            },
+        }
+//   
+    })
+</script>
+<script>
+    new Vue({
+        el: '#ap',
+        data: function () {
+            return {
+                editform: {},
+                postform: {},
+            };
+        },
+        created() {
+            const that = this;
+            that.getform();
+        },
+        methods: {
+
+            getform() {
+                this.editform = {
+                    uname: '曾运棋',
+                    sex: '1',
+                    email: '123@qq.com',
+                    identity: '4565564',
+                    phone: '12345648',
+                    birthday: '2020-14-2',
+                    signature: '你哈 ',
+                    address: '广州',
+                    registrationtime: '2020-02-30'
+                };
+            },
+        }
+    })
+</script>
+<!--
+	作者：offline
+	时间：2020-03-09
+	描述：查看订单列表
+-->
+<script>
+    var myname = $("#myuname").val();
+    var tname = $("#tname").val();
+    var orderid = $("#orderid").val();
+    new Vue({
+        el: '#order',
+        data: function () {
+            return {
+                myorders: [],
+                pinglun: [],
+                // huifu: [],
+                order: [],
+                table: false,
+                a: [{
+                    content: '',
+                    name: '',
+                    fid:'',
+                    useredname: '',  //被回复的人的名字
+                    username: '',   //回复人的名字
+                    type: '2'   //类型回复
+                }],
+                dialog: false,
+                loading: false,
+                addpinglun: {
+                    oid: '',
+                    tname: '',
+                    content: '',
+                    scoring: '',
+                    type: '1'
+                },
+                addhiufu: {
+                    aid: '',
+                    username: '',
+                    useredname: '',
+                    content: '',
+                    type: '2'
+                },
+                formLabelWidth: '80px',
+                timer: null,
+            };
+        },
+        created() {
+            const that = this;
+            that.getorder();
+            that.getpinglun();
+        },
+        methods: {
+
+            getorder() {
+                axios.get('/order/getone'
+                ).then(req => {
+                    this.order = req.data.data;
+                })
+            },
+            getpinglun() {
+                axios.get('/pinglun/selectall', {
+                        params: {
+                            oid: orderid
+                        }
+                    }
+                ).then(req => {
+                    this.pinglun = req.data.data;
+                    req.data.data.forEach((v, index) => {
+                        console.log("================================================================================")
+                        console.log(v);
+                        console.log(index);
+                        let a = {
+                            content: '',
+                            name:'',
+                            useredname: '',  //被回复的人的名字
+                            username: '',   //回复人的名字
+                            type: '2'   //类型回复
+                        };
+                        this.a.push(a);
+                        // this.a[index].hu='';
+                        // this.a[index].name='';
+                        // console.log("+++++++++++++++++++++++++++++++++++++++++++");
+                        console.log(this.a);
+                    });
+
+                    // this.huifu = req.data.data[0].huifuplDTOS;
+                })
+            },
+
+            addpinglun(add) {
+                this.dialog = true;
+                this.pinglun.oid = add.oid;
+                this.pinglun.tname = add.tname;
+            },
+            handleClose(done) {
+                if (this.loading) {
+                    return;
+                }
+                this.$confirm('确定要发布评论吗？')
+                    .then(_ => {
+                        // this.loading = true;
+                        this.timer = setTimeout(() => {
+                            axios.post('/pinglun/add', JSON.stringify(this.pinglun), {
+                                    headers: {
+                                        'Content-Type': 'application/json;charset=UTF-8'
+                                    }
+                                }
+                            ).then(req => {
+                                // 动画关闭需要一定的时间
+                                setTimeout(() => {
+                                    this.loading = false;
+                                }, 400);
+                                window.location.href = "/order"
+                            })
+
+                        }, 2000);
+                    })
+                ;
+            },
+            cancelForm() {
+                this.loading = false;
+                this.dialog = false;
+                clearTimeout(this.timer);
+            },
+            //取消订单
+            delect(val) {
+                var a = {
+                    oid: val.oid,
+                    type: "3"
+                };
+                this.$confirm('是否删除订单?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    axios.post('/order/edit', JSON.stringify(a), {
+                            headers: {
+                                'Content-Type': 'application/json;charset=UTF-8'
+                            }
+                        }
+                    ).then(req => {
+                        this.$message({
+                            type: 'success',
+                            message: '删除成功!'
+
+                        });
+                        //window.location.href = "/order";
+                        this.getmyorder();
+                    })
+
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    })
+                })
+
+
+            },
+            x(b, index) {
+                console.log(
+                    '===================================================================='
+                );// this.ah = a;
+                console.log(b);
+                this.a[index].name = b.username;
+                this.a[index].username = tname;
+                this.a[index].useredname = b.username;
+               // this.a[index].fid = this.pinglun[index].aid;
+               // this.a[index].comment =
+              //  this.dialogVisible = true;
+            },
+            y(b, index) {
+                console.log(
+                    '===================================================================='
+                );// this.ah = a;
+                console.log(b);
+                this.a[index].name = b.useredname;
+                this.a[index].username = tname;
+                this.a[index].useredname = b.useredname;
+                //this.a[index].fid = this.pinglun[index].aid;
+                // this.a[index].username =
+                //     aid:'',
+                //     username:'',
+                //     useredname:'',
+                   // this.dialogVisible = true;
+            },
+            re(index) {
+                this.a[index].fid = this.pinglun[index].aid;
+                if(this.a[index].name==''){
+                    this.a[index].username=tname;
+                    this.a[index].useredname=this.pinglun[index].uname;
+                }
+                axios.post('/pinglun/add', JSON.stringify(this.a[index]), {
+                        headers: {
+                            'Content-Type': 'application/json;charset=UTF-8'
+                        }
+                    }
+                ).then(req => {
+                    this.getpinglun();
+                    this.a[index].content='';
+                })
+                console.log(this.a[index])
+
+            },
+            del(a){
+                axios.post('/pinglun/add', JSON.stringify(this.a[index]), {
+                        headers: {
+                            'Content-Type': 'application/json;charset=UTF-8'
+                        }
+                    }
+                ).then(req => {
+                    this.getpinglun();
+                    this.a[index].content='';
+                })
+            }
+        }
+    })
+</script>
+</body>
+</html>

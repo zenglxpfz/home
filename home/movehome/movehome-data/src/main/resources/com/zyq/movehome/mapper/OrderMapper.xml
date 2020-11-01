@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zyq.movehome.mapper.OrderMapper" >
+  <resultMap id="BaseResultMap" type="com.zyq.movehome.dto.OrderDTO" >
+    <id column="OID" property="oid" jdbcType="INTEGER" />
+    <result column="TNAME" property="tname" jdbcType="VARCHAR" />
+    <result column="UNAME" property="uname" jdbcType="VARCHAR" />
+    <result column="MTITLE" property="mtitle" jdbcType="VARCHAR" />
+    <result column="MBEGIN" property="mbegin" jdbcType="VARCHAR" />
+    <result column="MEND" property="mend" jdbcType="VARCHAR" />
+    <result column="MTIME" property="mtime" jdbcType="TIMESTAMP" />
+    <result column="MATTENTION" property="mattention" jdbcType="VARCHAR" />
+    <result column="AMOUNT" property="amount" jdbcType="BIGINT" />
+    <result column="PAYFOR" property="payfor" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+    <result column="CREATETIME" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="FINISHTIME" property="finishtime" jdbcType="TIMESTAMP" />
+    <result column="SCORING" property="scoring" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <resultMap id="orderandappraisalResultMap" type="com.zyq.movehome.dto.OrderDTO" >
+    <id column="OID" property="oid" jdbcType="INTEGER" />
+    <result column="TNAME" property="tname" jdbcType="VARCHAR" />
+    <result column="UNAME" property="uname" jdbcType="VARCHAR" />
+    <result column="MTITLE" property="mtitle" jdbcType="VARCHAR" />
+    <result column="MBEGIN" property="mbegin" jdbcType="VARCHAR" />
+    <result column="MEND" property="mend" jdbcType="VARCHAR" />
+    <result column="MTIME" property="mtime" jdbcType="TIMESTAMP" />
+    <result column="MATTENTION" property="mattention" jdbcType="VARCHAR" />
+    <result column="AMOUNT" property="amount" jdbcType="BIGINT" />
+    <result column="PAYFOR" property="payfor" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+    <result column="CREATETIME" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="FINISHTIME" property="finishtime" jdbcType="TIMESTAMP" />
+    <result column="SCORING" property="scoring" jdbcType="VARCHAR" />
+    <association property="appraisal" javaType="com.zyq.movehome.dto.AppraisalDTO" >
+      <result column="AID" property="aid" jdbcType="INTEGER" />
+      <result column="OID" property="oid" jdbcType="INTEGER" />
+      <result column="UID" property="uid" jdbcType="INTEGER" />
+      <result column="TID" property="tid" jdbcType="INTEGER" />
+      <result column="CONTENT" property="content" jdbcType="VARCHAR" />
+      <result column="SCORING" property="scoring" jdbcType="VARCHAR" />
+      <result column="CREATETIME" property="createtime" jdbcType="TIMESTAMP" />
+    </association>
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    OID, TNAME, UNAME, MTITLE, MBEGIN, MEND, MTIME, MATTENTION, AMOUNT, PAYFOR, STATUS, 
+    CREATETIME, FINISHTIME, SCORING
+  </sql>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from torder
+    where OID = #{oid,jdbcType=INTEGER}
+  </select>
+  <select id="selectTopOrder" resultType="com.zyq.movehome.dto.TorderTeamResult" parameterType="com.zyq.movehome.dto.OrderDTO" >
+    select TNAME , count(1)
+    from torder o
+    group by o.TNAME
+    order by count(TNAME)
+    desc LIMIT 0,3
+  </select>
+
+  <select id="selectcount" resultType="java.lang.Integer" parameterType="java.lang.String" >
+    select  count(TNAME)
+    from torder
+    where TNAME = #{tname}
+    group by torder.TNAME
+  </select>
+  <!--加上评论一起 一对一查询-->
+  <!--<select id="selectOne" resultMap="orderandappraisalResultMap" parameterType="java.lang.Integer" >-->
+    <!--select-->
+    <!--*-->
+    <!--from torder,appraisal-->
+    <!--where torder.OID = #{oid,jdbcType=INTEGER} and torder.OID = appraisal.OID-->
+  <!--</select>-->
+  <select id="selectOne" resultMap="BaseResultMap" >
+    select *
+    from torder
+    where OID = #{oid,jdbcType=INTEGER}
+     </select>
+  <select id="page" resultMap="BaseResultMap" >
+    select *
+    from torder
+     </select>
+  <select id="selectAll" resultMap="BaseResultMap" parameterType="com.zyq.movehome.dto.OrderDTO" >
+    select
+    <include refid="Base_Column_List" />
+    from torder
+    where 1=1
+    <if test="oid != null" >
+     and OID = #{oid,jdbcType=INTEGER}
+    </if>
+    <if test="tname != null" >
+      and TNAME = #{tname,jdbcType=VARCHAR}
+    </if>
+    <if test="uname != null" >
+      and  UNAME= #{uname,jdbcType=VARCHAR}
+    </if>
+    <if test="mtitle != null" >
+      and MTITLE= #{mtitle,jdbcType=VARCHAR}
+    </if>
+    <if test="mbegin != null" >
+      and MBEGIN= #{mbegin,jdbcType=VARCHAR}
+    </if>
+    <if test="mend != null" >
+      and MEND= #{mend,jdbcType=VARCHAR}
+    </if>
+    <if test="mtime != null" >
+      and MTIME=  #{mtime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="mattention != null" >
+      and MATTENTION= #{mattention,jdbcType=VARCHAR}
+    </if>
+    <if test="amount != null" >
+      and AMOUNT= #{amount,jdbcType=BIGINT}
+    </if>
+    <if test="payfor != null" >
+      and PAYFOR= #{payfor,jdbcType=VARCHAR}
+    </if>
+    <if test="status != null" >
+      and STATUS= #{status,jdbcType=VARCHAR}
+    </if>
+    <if test="createtime != null" >
+      and CREATETIME=  #{createtime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="finishtime != null" >
+      and FINISHTIME=  #{finishtime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="scoring != null" >
+      and SCORING=  #{scoring,jdbcType=VARCHAR}
+    </if>
+    and STATUS in ("1","0","2")
+    order by CREATETIME desc
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from torder
+    where OID = #{oid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.zyq.movehome.dto.OrderNewDTO" >
+    insert into torder (OID, TNAME, UNAME,
+      MTITLE, MBEGIN, MEND, 
+      MTIME, MATTENTION, AMOUNT, 
+      PAYFOR, STATUS, CREATETIME, 
+      FINISHTIME, SCORING)
+    values (#{oid,jdbcType=INTEGER}, #{tname,jdbcType=VARCHAR}, #{uname,jdbcType=VARCHAR}, 
+      #{mtitle,jdbcType=VARCHAR}, #{mbegin,jdbcType=VARCHAR}, #{mend,jdbcType=VARCHAR}, 
+      #{mtime,jdbcType=TIMESTAMP}, #{mattention,jdbcType=VARCHAR}, #{amount,jdbcType=BIGINT}, 
+      #{payfor,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, 
+      #{finishtime,jdbcType=TIMESTAMP}, #{scoring,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zyq.movehome.dto.OrderNewDTO" >
+    insert into torder
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="oid != null" >
+        OID,
+      </if>
+      <if test="tname != null" >
+        TNAME,
+      </if>
+      <if test="uname != null" >
+        UNAME,
+      </if>
+      <if test="mtitle != null" >
+        MTITLE,
+      </if>
+      <if test="mbegin != null" >
+        MBEGIN,
+      </if>
+      <if test="mend != null" >
+        MEND,
+      </if>
+      <if test="mtime != null" >
+        MTIME,
+      </if>
+      <if test="mattention != null" >
+        MATTENTION,
+      </if>
+      <if test="amount != null" >
+        AMOUNT,
+      </if>
+      <if test="payfor != null" >
+        PAYFOR,
+      </if>
+      <if test="status != null" >
+        STATUS,
+      </if>
+      <if test="createtime != null" >
+        CREATETIME,
+      </if>
+      <if test="finishtime != null" >
+        FINISHTIME,
+      </if>
+      <if test="scoring != null" >
+        SCORING,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="oid != null" >
+        #{oid,jdbcType=INTEGER},
+      </if>
+      <if test="tname != null" >
+        #{tname,jdbcType=VARCHAR},
+      </if>
+      <if test="uname != null" >
+        #{uname,jdbcType=VARCHAR},
+      </if>
+      <if test="mtitle != null" >
+        #{mtitle,jdbcType=VARCHAR},
+      </if>
+      <if test="mbegin != null" >
+        #{mbegin,jdbcType=VARCHAR},
+      </if>
+      <if test="mend != null" >
+        #{mend,jdbcType=VARCHAR},
+      </if>
+      <if test="mtime != null" >
+        #{mtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mattention != null" >
+        #{mattention,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null" >
+        #{amount,jdbcType=BIGINT},
+      </if>
+      <if test="payfor != null" >
+        #{payfor,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="finishtime != null" >
+        #{finishtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="scoring != null" >
+        #{scoring,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zyq.movehome.dto.OrderDTO" >
+    update torder
+    <set >
+      <if test="tname != null" >
+        TNAME = #{tname,jdbcType=VARCHAR},
+      </if>
+      <if test="uname != null" >
+        UNAME = #{uname,jdbcType=VARCHAR},
+      </if>
+      <if test="mtitle != null" >
+        MTITLE = #{mtitle,jdbcType=VARCHAR},
+      </if>
+      <if test="mbegin != null" >
+        MBEGIN = #{mbegin,jdbcType=VARCHAR},
+      </if>
+      <if test="mend != null" >
+        MEND = #{mend,jdbcType=VARCHAR},
+      </if>
+      <if test="mtime != null" >
+        MTIME = #{mtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mattention != null" >
+        MATTENTION = #{mattention,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null" >
+        AMOUNT = #{amount,jdbcType=BIGINT},
+      </if>
+      <if test="payfor != null" >
+        PAYFOR = #{payfor,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        CREATETIME = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="finishtime != null" >
+        FINISHTIME = #{finishtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="scoring != null" >
+        SCORING = #{scoring,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where OID = #{oid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zyq.movehome.dto.OrderDTO" >
+    update torder
+    set TNAME = #{tname,jdbcType=VARCHAR},
+      UNAME = #{uname,jdbcType=VARCHAR},
+      MTITLE = #{mtitle,jdbcType=VARCHAR},
+      MBEGIN = #{mbegin,jdbcType=VARCHAR},
+      MEND = #{mend,jdbcType=VARCHAR},
+      MTIME = #{mtime,jdbcType=TIMESTAMP},
+      MATTENTION = #{mattention,jdbcType=VARCHAR},
+      AMOUNT = #{amount,jdbcType=BIGINT},
+      PAYFOR = #{payfor,jdbcType=VARCHAR},
+      STATUS = #{status,jdbcType=VARCHAR},
+      CREATETIME = #{createtime,jdbcType=TIMESTAMP},
+      FINISHTIME = #{finishtime,jdbcType=TIMESTAMP},
+      SCORING = #{scoring,jdbcType=VARCHAR}
+    where OID = #{oid,jdbcType=INTEGER}
+  </update>
+</mapper>

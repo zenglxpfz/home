@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>About</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <meta name="keywords" content=""/>
+
+    <script type="application/x-javascript">
+        addEventListener("load", function () {
+            setTimeout(hideURLbar, 0);
+        }, false);
+
+        function hideURLbar() {
+            window.scrollTo(0, 1);
+        }
+    </script>
+    <link rel="stylesheet" href="/css/bootstrap.css"> <!-- Bootstrap-Core-CSS -->
+    <link href="/css/style.css" rel='stylesheet' type='text/css'/>
+    <link href="/css/fontawesome-all.css" rel="stylesheet">
+    <link href="http://fonts.googleapis.com/css?family=Exo+2" rel="stylesheet">
+    <link href="http://fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i"
+          rel="stylesheet">
+    <!--	描述：elm -->
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="https://cdn.staticfile.org/axios/0.18.0/axios.min.js"></script>
+    <script src="base/plugins/jquery/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="/base/dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="/base/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <link rel="stylesheet" href="/css/common.css">
+    <!--elm  -->
+</head>
+
+<body>
+<header>
+    <div class="header">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="index.html">同城搬家供需信息交流平台</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item ">
+                        <a class="nav-link" href="/main">首页<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item  ">
+                        <a class="nav-link" href="/order">我的订单</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/moveteam">寻找搬家团队</a>
+                    </li>
+                    <li class="nav-item" active>
+                        <a class="nav-link" href="/myliuyan">我的留言</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link " href="/notice">告示</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span th:if=" ${session.user} ne null" th:text="${session.user.uname}"></span>
+                            <span th:if="${session.user} eq null " th:text="请登录"></span>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" th:if="${session.user} ne null" href="/loginup">
+                                <span th:if="${session.user} ne null " th:text="注销"></span>
+                            </a>
+                            <a class="dropdown-item" th:if="${session.user} eq null " href="/">
+                                <span th:if="${session.user} eq null " th:text="登录"></span>
+                            </a>
+                            <a href="#" class="dropdown-item" data-toggle="modal" data-target="#persionmessage"
+                               role="button">查看个人信息</a>
+                            <a href="#" class="dropdown-item" data-toggle="modal" data-target="#editmessage"
+                               role="button">编辑个人信息</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+</header>
+<div id="teammessage">
+    <input type="hidden" th:value="${session.tid}" id="tid" name="tid"/>
+    <input type="hidden" th:value="${session.user.uid}" id="uid" name="uid"/>
+    <input type="hidden" th:value="${session.user.uname}" id="uname" name="uid"/>
+
+    <div class="statistics py-5">
+        <div class="container">
+            <div class="w3-head-all text-center mb-5">
+                <h3>{{teammessage.tname}}团队的信息</h3>
+            </div>
+            <div>
+                <a class="button success" href="/xiadan" type="button" style="font-size: 30px;">下单</a>
+            </div>
+            <div class="row">
+                <div class="col-md-6" style="height: 300px; width: 100%; border: 1px solid #000;">
+                    <br/>
+                    <h5 style="text-align: center; color: blue;">团队基本信息</h5>
+                    <el-form ref="form" :model="teammessage" label-width="120px">
+                        <el-form-item label="团队名称：">
+                            <span>{{teammessage.tname}}</span>
+                        </el-form-item>
+                        <el-form-item label="团队队长：">
+                            <span>{{teammessage.tduiz}}</span>
+                        </el-form-item>
+
+                        <el-form-item label="团队人数：">
+                            <span>{{teammessage.tperson}}</span>
+                        </el-form-item>
+
+                        <el-form-item label="团队服务范围：">
+                            <span>{{teammessage.trange}}</span>
+                        </el-form-item>
+                        <el-form-item label="团队联系电话：">
+                            <span>{{teammessage.tphone}}</span>
+                        </el-form-item>
+                        <el-button type="text" @click="dialogTableVisible = true">查看所有成员</el-button>
+                    </el-form>
+                    <el-dialog title="成员列表" :visible.sync="dialogTableVisible">
+                        <el-table :data="duiyuan">
+                            <el-table-column
+                                    type="index"
+                                    label="序号"
+                                    width="50">
+                            </el-table-column>
+                            <el-table-column property="uname" label="姓名" width="120"></el-table-column>
+                            <el-table-column property="phone" label="联系方式" width="120"></el-table-column>
+                            <el-table-column property="role" label="团队角色"></el-table-column>
+                        </el-table>
+                    </el-dialog>
+                </div>
+                <div class="col-md-6" style="height: 300px; width: 100%; border: 1px solid #000;">
+                    <br/>
+                    <h5 style="text-align: center; color: blue;">团队规则</h5>
+                    <el-table
+                            :data="rule"
+                            style="width: 100%"
+                            height="250">
+                        <el-table-column
+                                type="index"
+                                label="序号"
+                                width="120">
+                        </el-table-column>
+                        <el-table-column
+                                prop="crules"
+                                label="服务规则"
+                                width="250">
+                        </el-table-column>
+
+                    </el-table>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12" style="height: 300px; width: 100%;border: 1px solid #000;">
+                    <br/>
+                    <h5 style="text-align: center; color: blue;">团队资源</h5>
+                    <el-table
+                            :data="resources"
+                            style="width: 100%"
+                            height="250"
+                    >
+                        <el-table-column
+                                type="index"
+                                label="序号"
+                                width="120">
+                        </el-table-column>
+                        <el-table-column
+                                prop="rname"
+                                label="资源名称"
+                                width="120">
+                        </el-table-column>
+                        <el-table-column
+                                prop="rdescription"
+                                label="资源描述"
+                                width="180">
+                        </el-table-column>
+                        <el-table-column
+                                prop="rquantity"
+                                label="资源数量">
+                        </el-table-column>
+                        <el-table-column
+                                prop="buytime"
+                                label="购入时间">
+                        </el-table-column>
+                        <el-table-column
+                                prop="validity"
+                                label="有效期">
+                        </el-table-column>
+<!--                        <el-table-column-->
+<!--                                prop="picture"-->
+<!--                                label="资源图片">-->
+<!--                        </el-table-column>-->
+                    </el-table>
+
+                </div>
+            </div>
+            <el-divider><i class="el-icon-mobile-phone"></i></el-divider>
+            <div class="row">
+                <div class="col-md-12" style="height: auto; width: 100%;">
+
+
+                    <div>留言区：</div>
+                    <div>
+                        <div style="height: auto;width: 100%;" v-for="(o, index) in liuyan" :key="o"
+                             :offset="index > 0 ? 1 : 0">
+
+                            <div class="row" style="padding: 30px">
+                                <div class="col-md-3">
+                                    <h5>{{o.uname}}</h5>
+                                    <span style="font-size: 10px;">{{o.createtime}}</span><br/>
+
+                                    <span>{{o.content}}</span>
+                                </div>
+                                <div class="col-md-3 ">
+                                    <span>{{o.scoring}}</span>
+
+                                </div>
+                                <div class="col-md-3 col-md-offset-6" style="padding: 30px 20px">
+                                    <el-button v-if="o.username==loginname" round type="danger" size="small"
+                                               @click="del(o)">删除
+                                    </el-button>
+                                </div>
+                            </div>
+                            <div class="row">
+
+                                <div class="col-md-8">
+                                    <el-collapse v-model="activeNames" @change="handleChange">
+                                        <el-collapse-item title="查看回复" name="4">
+                                            <div style="height: auto;">
+
+                                                <div v-for="(h, index1) in o.mhuifuDTOS" :key="a"
+                                                     :offset="index > 0 ? 1 : 0">
+                                                    <div class="row">
+                                                        <div class="col-md-10">
+                                                            <a href="javascript:void(0);" @click="x(h,index)">{{h.username}}</a>回复
+                                                            <a href="javascript:void(0);" @click="y(h,index)">{{h.useredname}}</a>：{{h.content}}
+                                                            <span>{{h.createtime}}</span>
+                                                        </div>
+                                                        <div class="col-md-2 " style="padding: 20px">
+                                                            <el-button v-if="h.username==loginname" round type="danger"
+                                                                       size="small" @click="delhuifu(h,index)">删除
+                                                            </el-button>
+                                                        </div>
+                                                    </div>
+                                                    <br/>
+                                                    <!--<el-button @click="dialogVisible = true">回复</el-button>-->
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-8">
+                                                        <el-input maxlength="30" style="width: 100%" show-word-limit
+                                                                  type="textarea" v-model="a[index].content"
+                                                                  :placeholder="'回复'+a[index].name"/>
+                                                    </div>
+                                                    <el-button size="small" type="primary" round @click="re(index)">回复
+                                                    </el-button>
+
+                                                </div>
+                                            </div>
+                                        </el-collapse-item>
+                                    </el-collapse>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div style="padding:30px 0">
+
+                        </div>
+                    </div>
+                    <!--<el-form ref="form" :model="addmessage" label-width="80px">-->
+                        <!--<el-form-item label="留言：">-->
+                            <!--<el-input type="textarea" v-model="addmessage.content"></el-input>-->
+                            <!--<el-button type="primary" @click="submit">发布</el-button>-->
+                            <!--&lt;!&ndash;<el-button >取消</el-button>&ndash;&gt;-->
+                        <!--</el-form-item>-->
+
+                    <!--</el-form>-->
+                    <div>
+
+
+                        <el-form :model="addmessage" ref="addmessage" :rules="rules">
+                            <input type="hidden" id="cid"/>
+                            <el-form-item prop="content" >
+            <textarea v-model="addmessage.content" class="comment-content open" style="width: 60%;height: 65px"
+                      name="comment" id="comment" maxlength="1000" placeholder="回答点什么呢">
+             </textarea>
+                            </el-form-item>
+                            <div class="opt-box" style="width: 70%">
+                                <div  class="text-right" style="padding: 30px 110px 20px ; font-size: 25px ;">
+                                    <a href="javascript:void(0);" @click="submit('addmessage')">发表</a>
+                                </div>
+                            </div>
+                        </el-form>
+                    </div>
+                </div>
+            </div>
+            <!--<div style="height: 400px; width: 100%;border: 1px solid #000; text-align: center;padding: 100px;">-->
+        </div>
+
+    </div>
+
+</div>
+
+
+</div>
+<div class="footer-main">
+    <div class="footer-social">
+        <h4>关于平台</h4>
+        <ul>
+            <li>
+
+                <span class="fab fa-facebook-f icon_facebook"></span>
+                <p style="color: white;">服务范围为广东省广州市地区</p>
+
+            </li>
+
+        </ul>
+    </div>
+    <div class="cpy-right">
+        <p>2020-3-5 《同城搬家供需信息交流平台》平台联系人：曾运棋 联系电话：12345678910</p>
+    </div>
+</div>
+<!-- //footer -->
+<!-- odometer-script -->
+<script src="/js/odometer.js"></script>
+<script>
+    window.odometerOptions = {
+        format: '(ddd).dd'
+    };
+</script>
+<script>
+    setTimeout(function () {
+        jQuery('#w3l_stats1').html(25);
+    }, 1500);
+</script>
+<script>
+    setTimeout(function () {
+        jQuery('#w3l_stats2').html(330);
+    }, 1500);
+</script>
+<script>
+    setTimeout(function () {
+        jQuery('#w3l_stats3').html(542);
+    }, 1500);
+</script>
+<!-- //odometer-script -->
+
+<!-- js -->
+<script type="text/javascript" src="/js/jquery-2.2.3.min.js"></script>
+<script type="text/javascript" src="/js/bootstrap.js"></script> <!-- Necessary-JavaScript-File-For-Bootstrap -->
+<!-- //js -->
+<!-- start-smooth-scrolling -->
+<script src="/js/move-top.js"></script>
+<script src="/js/easing.js"></script>
+<script>
+    jQuery(document).ready(function ($) {
+        $(".scroll").click(function (event) {
+            event.preventDefault();
+            $('html,body').animate({
+                scrollTop: $(this.hash).offset().top
+            }, 1000);
+        });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $().UItoTop({
+            easingType: 'easeOutQuart'
+        });
+
+    });
+</script>
+<script src="/js/SmoothScroll.min.js"></script>
+<!--
+	作者：offline
+	时间：2020-03-09
+	描述：查看团队信息列表包括志愿表和规则表
+-->
+<script>
+    var tid = $("#tid").val();
+    var uid = $("#uid").val();
+    var uname = $("#uname").val();
+    new Vue({
+        el: '#teammessage',
+        data: function () {
+            return {
+                loginname: uname,
+                pinglun: [],
+                // huifu: [],
+                order: [],
+                table: false,
+                a: [{
+                    content: '',
+                    name: '',
+                    fid: '',
+                    useredname: '',  //被回复的人的名字
+                    username: '',   //回复人的名字
+                    type: '2'   //类型回复
+                }],
+                teammessage: {},
+                resources: [],
+                rule: [],
+                liuyan: [],
+                addmessage: {
+                    content: '',
+                    uid: ''
+                },
+                duiyuan: [],
+                //保存留言信息
+                //	getmessage: [],
+                dialogTableVisible: false,
+                rules: {
+                    // tital: [
+                    //     { required: true, message: '请输入公告标题', trigger: 'change' },
+                    //
+                    // ],
+                    content: [
+                        {required: true, message: '请输入评论内容', trigger: 'blur'}
+                    ],
+
+                }
+            };
+        },
+        created() {
+            const that = this;
+            that.oneteam();
+            that.getliuyan();
+        },
+        methods: {
+            submit(fb) {
+                this.$refs[fb].validate((valid) => {
+                    if (valid) {
+                        const that = this;
+                        this.addmessage.uid = uid;
+                        this.addmessage.tid = tid;
+                        axios.post('/mes/add',
+                            JSON.stringify(this.addmessage), {
+                                headers: {
+                                    'Content-Type': 'application/json;charset=UTF-8'
+                                }
+                            }).then(req => {
+                            this.$message({message: '发布成功！！', type: 'success'});
+                            //  alert("发布成功！！");
+                            this.addmessage.content = null;
+                            this.getliuyan();
+
+                        })
+
+                    } else {
+                        this.$message({message: '评论内容不能为空！', type: 'error'});
+                        return false;
+                    }
+                });
+            },
+            oneteam() {
+                const that = this;
+                axios.get('/team/orderteam', {
+                    params: {
+                        tid: tid,
+                        uid: uid
+                    }
+                }).then(req => {
+                    this.teammessage = req.data.data;
+                    this.resources = req.data.data.resoucesDTOS;
+                    this.rule = req.data.data.contentDTOS;
+                    this.duiyuan = req.data.data.userserviceDTOs;
+
+                })
+            },
+            getliuyan() {
+                var x = {
+                    tid: tid
+                }
+                const that = this;
+                axios.post('/mes/selectour', JSON.stringify(x), {
+                        headers: {
+                            'Content-Type': 'application/json;charset=UTF-8'
+                        }
+                    }
+                ).then(req => {
+                    this.liuyan = req.data.data;
+                    req.data.data.forEach((v, index) => {
+                        console.log("================================================================================")
+                        console.log(v);
+                        console.log(index);
+                        let a = {
+                            content: '',
+                            name: '',
+                            useredname: '',  //被回复的人的名字
+                            username: '',   //回复人的名字
+                            type: '2'   //类型回复
+                        };
+                        this.a.push(a);
+                    });
+                })
+            },
+            getpinglun() {
+                axios.get('/pinglun/selectall', {
+                        params: {
+                            oid: orderid
+                        }
+                    }
+                ).then(req => {
+                    this.pinglun = req.data.data;
+                    req.data.data.forEach((v, index) => {
+                        console.log("================================================================================")
+                        console.log(v);
+                        console.log(index);
+                        let a = {
+                            content: '',
+                            name: '',
+                            useredname: '',  //被回复的人的名字
+                            username: '',   //回复人的名字
+                            type: '2'   //类型回复
+                        };
+                        this.a.push(a);
+                        // this.a[index].hu='';
+                        // this.a[index].name='';
+                        // console.log("+++++++++++++++++++++++++++++++++++++++++++");
+                        console.log(this.a);
+                    });
+
+                    // this.huifu = req.data.data[0].huifuplDTOS;
+                })
+            },
+
+            addpinglun(add) {
+                this.dialog = true;
+                this.pinglun.oid = add.oid;
+                this.pinglun.tname = add.tname;
+            },
+            handleClose(done) {
+                if (this.loading) {
+                    return;
+                }
+                this.$confirm('确定要发布评论吗？')
+                    .then(_ => {
+                        // this.loading = true;
+                        this.timer = setTimeout(() => {
+                            axios.post('/pinglun/add', JSON.stringify(this.pinglun), {
+                                    headers: {
+                                        'Content-Type': 'application/json;charset=UTF-8'
+                                    }
+                                }
+                            ).then(req => {
+                                // 动画关闭需要一定的时间
+                                setTimeout(() => {
+                                    this.loading = false;
+                                }, 400);
+                                window.location.href = "/order"
+                            })
+
+                        }, 2000);
+                    })
+                ;
+            },
+            cancelForm() {
+                this.loading = false;
+                this.dialog = false;
+                clearTimeout(this.timer);
+            },
+            //取消订单
+            delect(val) {
+                var a = {
+                    oid: val.oid,
+                    type: "3"
+                };
+                this.$confirm('是否删除订单?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    axios.post('/order/edit', JSON.stringify(a), {
+                            headers: {
+                                'Content-Type': 'application/json;charset=UTF-8'
+                            }
+                        }
+                    ).then(req => {
+                        this.$message({
+                            type: 'success',
+                            message: '删除成功!'
+
+                        });
+                        //window.location.href = "/order";
+                        this.getmyorder();
+                    })
+
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    })
+                })
+
+
+            },
+            x(b, index) {
+                console.log(
+                    '===================================================================='
+                );// this.ah = a;
+                console.log(b);
+                this.a[index].name = b.username;
+                this.a[index].username = uname;
+                this.a[index].useredname = b.username;
+                // this.a[index].fid = this.pinglun[index].aid;
+                // this.a[index].comment =
+                //  this.dialogVisible = true;
+            },
+            y(b, index) {
+                console.log(
+                    '===================================================================='
+                );// this.ah = a;
+                console.log(b);
+                this.a[index].name = b.useredname;
+                this.a[index].username = uname;
+                this.a[index].useredname = b.useredname;
+            },
+            re(index) {
+                this.a[index].fid = this.liuyan[index].mid;
+                if (this.a[index].name == '') {
+                    this.a[index].username = uname;
+                    this.a[index].useredname = this.liuyan[index].uname;
+                }
+                axios.post('/mhuifu/add', JSON.stringify(this.a[index]), {
+                        headers: {
+                            'Content-Type': 'application/json;charset=UTF-8'
+                        }
+                    }
+                ).then(req => {
+                    this.getliuyan();
+                    this.a[index].content = '';
+                })
+                console.log(this.a[index])
+
+            },
+            del(a) {
+                var mid = a.mid;
+                axios.get('/mes/delect', {
+                        params: {
+                            mid: mid
+                        }
+                    }
+                ).then(req => {
+                    this.getliuyan();
+                    this.a[index].content = '';
+                })
+            },
+            delhuifu(a, index) {
+                var mid = a.mid;
+                axios.get('/mhuifu/del', {
+                        params: {
+                            mid: mid
+                        }
+                    }
+                ).then(req => {
+                    this.getliuyan();
+                    this.a[index].content = '';
+                })
+            },
+
+        }
+    })
+</script>
+
+</body>
+</html>

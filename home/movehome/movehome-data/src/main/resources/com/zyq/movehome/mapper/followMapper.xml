@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zyq.movehome.mapper.followMapper" >
+  <resultMap id="BaseResultMap" type="com.zyq.movehome.dto.followNewDTO" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="LOAN_APPLY_ID" property="loanApplyId" jdbcType="VARCHAR" />
+    <result column="FOLLOW_USERID" property="followUserid" jdbcType="VARCHAR" />
+    <result column="FOLLOW_TIME" property="followTime" jdbcType="TIMESTAMP" />
+    <result column="CONTENT" property="content" jdbcType="VARCHAR" />
+    <result column="FSS_UIDS" property="fssUids" jdbcType="VARCHAR" />
+    <result column="NEXT_ FOLLOW_TIME" property="nextFollowTime" jdbcType="TIMESTAMP" />
+    <result column="CREATED_TIME" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="FOLLOW_TYPE" property="followType" jdbcType="VARCHAR" />
+    <result column="JOURNAL _ID" property="journalId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, LOAN_APPLY_ID, FOLLOW_USERID, FOLLOW_TIME, CONTENT, FSS_UIDS, "NEXT_ FOLLOW_TIME", 
+    CREATED_TIME, FOLLOW_TYPE, "JOURNAL _ID"
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from follow
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from follow
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.zyq.movehome.dto.followNewDTO" >
+    insert into follow (ID, LOAN_APPLY_ID, FOLLOW_USERID, 
+      FOLLOW_TIME, CONTENT, FSS_UIDS, 
+      "NEXT_ FOLLOW_TIME", CREATED_TIME, FOLLOW_TYPE, 
+      "JOURNAL _ID")
+    values (#{id,jdbcType=VARCHAR}, #{loanApplyId,jdbcType=VARCHAR}, #{followUserid,jdbcType=VARCHAR}, 
+      #{followTime,jdbcType=TIMESTAMP}, #{content,jdbcType=VARCHAR}, #{fssUids,jdbcType=VARCHAR}, 
+      #{nextFollowTime,jdbcType=TIMESTAMP}, #{createdTime,jdbcType=TIMESTAMP}, #{followType,jdbcType=VARCHAR}, 
+      #{journalId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zyq.movehome.dto.followNewDTO" >
+    insert into follow
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="loanApplyId != null" >
+        LOAN_APPLY_ID,
+      </if>
+      <if test="followUserid != null" >
+        FOLLOW_USERID,
+      </if>
+      <if test="followTime != null" >
+        FOLLOW_TIME,
+      </if>
+      <if test="content != null" >
+        CONTENT,
+      </if>
+      <if test="fssUids != null" >
+        FSS_UIDS,
+      </if>
+      <if test="nextFollowTime != null" >
+        "NEXT_ FOLLOW_TIME",
+      </if>
+      <if test="createdTime != null" >
+        CREATED_TIME,
+      </if>
+      <if test="followType != null" >
+        FOLLOW_TYPE,
+      </if>
+      <if test="journalId != null" >
+        "JOURNAL _ID",
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="loanApplyId != null" >
+        #{loanApplyId,jdbcType=VARCHAR},
+      </if>
+      <if test="followUserid != null" >
+        #{followUserid,jdbcType=VARCHAR},
+      </if>
+      <if test="followTime != null" >
+        #{followTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="fssUids != null" >
+        #{fssUids,jdbcType=VARCHAR},
+      </if>
+      <if test="nextFollowTime != null" >
+        #{nextFollowTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdTime != null" >
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="followType != null" >
+        #{followType,jdbcType=VARCHAR},
+      </if>
+      <if test="journalId != null" >
+        #{journalId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zyq.movehome.dto.followNewDTO" >
+    update follow
+    <set >
+      <if test="loanApplyId != null" >
+        LOAN_APPLY_ID = #{loanApplyId,jdbcType=VARCHAR},
+      </if>
+      <if test="followUserid != null" >
+        FOLLOW_USERID = #{followUserid,jdbcType=VARCHAR},
+      </if>
+      <if test="followTime != null" >
+        FOLLOW_TIME = #{followTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="content != null" >
+        CONTENT = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="fssUids != null" >
+        FSS_UIDS = #{fssUids,jdbcType=VARCHAR},
+      </if>
+      <if test="nextFollowTime != null" >
+        "NEXT_ FOLLOW_TIME" = #{nextFollowTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdTime != null" >
+        CREATED_TIME = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="followType != null" >
+        FOLLOW_TYPE = #{followType,jdbcType=VARCHAR},
+      </if>
+      <if test="journalId != null" >
+        "JOURNAL _ID" = #{journalId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zyq.movehome.dto.followNewDTO" >
+    update follow
+    set LOAN_APPLY_ID = #{loanApplyId,jdbcType=VARCHAR},
+      FOLLOW_USERID = #{followUserid,jdbcType=VARCHAR},
+      FOLLOW_TIME = #{followTime,jdbcType=TIMESTAMP},
+      CONTENT = #{content,jdbcType=VARCHAR},
+      FSS_UIDS = #{fssUids,jdbcType=VARCHAR},
+      "NEXT_ FOLLOW_TIME" = #{nextFollowTime,jdbcType=TIMESTAMP},
+      CREATED_TIME = #{createdTime,jdbcType=TIMESTAMP},
+      FOLLOW_TYPE = #{followType,jdbcType=VARCHAR},
+      "JOURNAL _ID" = #{journalId,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

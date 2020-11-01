@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zyq.movehome.mapper.ReportingMapper" >
+  <resultMap id="BaseResultMap" type="com.zyq.movehome.dto.ReportingDTO" >
+    <id column="RID" property="rid" jdbcType="INTEGER" />
+    <result column="RNAME" property="rname" jdbcType="VARCHAR" />
+    <result column="UNAME" property="uname" jdbcType="VARCHAR" />
+    <result column="RCONTENT" property="rcontent" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+    <result column="PICTURE" property="picture" jdbcType="VARCHAR" />
+    <result column="TIME" property="time" jdbcType="TIMESTAMP" />
+    <result column="DEALPEOPLE" property="dealpeople" jdbcType="VARCHAR" />
+    <result column="DEALTIME" property="dealtime" jdbcType="TIMESTAMP" />
+    <result column="DEALRESULT" property="dealresult" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    RID, RNAME, UNAME, RCONTENT, STATUS, PICTURE, TIME, DEALPEOPLE, DEALTIME, DEALRESULT
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from reporting
+    where RID = #{rid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from reporting
+    where RID = #{rid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.zyq.movehome.dto.ReportingDTO" >
+    insert into reporting (RID, RNAME, UNAME, 
+      RCONTENT, STATUS, PICTURE, 
+      TIME, DEALPEOPLE, DEALTIME, 
+      DEALRESULT)
+    values (#{rid,jdbcType=INTEGER}, #{rname,jdbcType=VARCHAR}, #{uname,jdbcType=VARCHAR}, 
+      #{rcontent,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{picture,jdbcType=VARCHAR}, 
+      #{time,jdbcType=TIMESTAMP}, #{dealpeople,jdbcType=VARCHAR}, #{dealtime,jdbcType=TIMESTAMP}, 
+      #{dealresult,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zyq.movehome.dto.ReportingDTO" >
+    insert into reporting
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="rid != null" >
+        RID,
+      </if>
+      <if test="rname != null" >
+        RNAME,
+      </if>
+      <if test="uname != null" >
+        UNAME,
+      </if>
+      <if test="rcontent != null" >
+        RCONTENT,
+      </if>
+      <if test="status != null" >
+        STATUS,
+      </if>
+      <if test="picture != null" >
+        PICTURE,
+      </if>
+      <if test="time != null" >
+        TIME,
+      </if>
+      <if test="dealpeople != null" >
+        DEALPEOPLE,
+      </if>
+      <if test="dealtime != null" >
+        DEALTIME,
+      </if>
+      <if test="dealresult != null" >
+        DEALRESULT,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="rid != null" >
+        #{rid,jdbcType=INTEGER},
+      </if>
+      <if test="rname != null" >
+        #{rname,jdbcType=VARCHAR},
+      </if>
+      <if test="uname != null" >
+        #{uname,jdbcType=VARCHAR},
+      </if>
+      <if test="rcontent != null" >
+        #{rcontent,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="picture != null" >
+        #{picture,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null" >
+        #{time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dealpeople != null" >
+        #{dealpeople,jdbcType=VARCHAR},
+      </if>
+      <if test="dealtime != null" >
+        #{dealtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dealresult != null" >
+        #{dealresult,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zyq.movehome.dto.ReportingDTO" >
+    update reporting
+    <set >
+      <if test="rname != null" >
+        RNAME = #{rname,jdbcType=VARCHAR},
+      </if>
+      <if test="uname != null" >
+        UNAME = #{uname,jdbcType=VARCHAR},
+      </if>
+      <if test="rcontent != null" >
+        RCONTENT = #{rcontent,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="picture != null" >
+        PICTURE = #{picture,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null" >
+        TIME = #{time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dealpeople != null" >
+        DEALPEOPLE = #{dealpeople,jdbcType=VARCHAR},
+      </if>
+      <if test="dealtime != null" >
+        DEALTIME = #{dealtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dealresult != null" >
+        DEALRESULT = #{dealresult,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where RID = #{rid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zyq.movehome.dto.ReportingDTO" >
+    update reporting
+    set RNAME = #{rname,jdbcType=VARCHAR},
+      UNAME = #{uname,jdbcType=VARCHAR},
+      RCONTENT = #{rcontent,jdbcType=VARCHAR},
+      STATUS = #{status,jdbcType=VARCHAR},
+      PICTURE = #{picture,jdbcType=VARCHAR},
+      TIME = #{time,jdbcType=TIMESTAMP},
+      DEALPEOPLE = #{dealpeople,jdbcType=VARCHAR},
+      DEALTIME = #{dealtime,jdbcType=TIMESTAMP},
+      DEALRESULT = #{dealresult,jdbcType=VARCHAR}
+    where RID = #{rid,jdbcType=INTEGER}
+  </update>
+</mapper>

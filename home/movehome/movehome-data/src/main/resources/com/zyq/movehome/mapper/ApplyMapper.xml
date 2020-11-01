@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zyq.movehome.mapper.ApplyMapper" >
+  <resultMap id="BaseResultMap" type="com.zyq.movehome.dto.ApplyDTO" >
+    <id column="applyid" property="applyid" jdbcType="INTEGER" />
+    <result column="uname" property="uname" jdbcType="VARCHAR" />
+    <result column="tname" property="tname" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="connent" property="connent" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="applytime" property="applytime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    applyid, uname, tname, status, connent, type, applytime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from apply
+    where applyid = #{applyid,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByUnameOrTname" resultMap="BaseResultMap" parameterType="com.zyq.movehome.dto.ApplyDTO" >
+    select
+    <include refid="Base_Column_List" />
+    from apply
+    where 1=1
+    <if test="uname != null and uname !=''" >
+      and uname = #{uname,jdbcType=VARCHAR}
+    </if>
+    <if test="tname != null and tname !=''" >
+      and tname = #{tname,jdbcType=VARCHAR}
+    </if>
+    <if test="type != null and type !=''" >
+      and type = #{type,jdbcType=VARCHAR}
+    </if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from apply
+    where applyid = #{applyid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.zyq.movehome.dto.ApplyDTO" >
+    insert into apply (applyid, uname, tname, 
+      status, connent, type, 
+      applytime)
+    values (#{applyid,jdbcType=INTEGER}, #{uname,jdbcType=VARCHAR}, #{tname,jdbcType=VARCHAR}, 
+      #{status,jdbcType=VARCHAR}, #{connent,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, 
+      #{applytime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zyq.movehome.dto.ApplyDTO" >
+    insert into apply
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="applyid != null" >
+        applyid,
+      </if>
+      <if test="uname != null" >
+        uname,
+      </if>
+      <if test="tname != null" >
+        tname,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="connent != null" >
+        connent,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="applytime != null" >
+        applytime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="applyid != null" >
+        #{applyid,jdbcType=INTEGER},
+      </if>
+      <if test="uname != null" >
+        #{uname,jdbcType=VARCHAR},
+      </if>
+      <if test="tname != null" >
+        #{tname,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="connent != null" >
+        #{connent,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="applytime != null" >
+        #{applytime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zyq.movehome.dto.ApplyDTO" >
+    update apply
+    <set >
+      <if test="uname != null" >
+        uname = #{uname,jdbcType=VARCHAR},
+      </if>
+      <if test="tname != null" >
+        tname = #{tname,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="connent != null" >
+        connent = #{connent,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="applytime != null" >
+        applytime = #{applytime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where applyid = #{applyid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zyq.movehome.dto.ApplyDTO" >
+    update apply
+    set uname = #{uname,jdbcType=VARCHAR},
+      tname = #{tname,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      connent = #{connent,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR},
+      applytime = #{applytime,jdbcType=TIMESTAMP}
+    where applyid = #{applyid,jdbcType=INTEGER}
+  </update>
+</mapper>

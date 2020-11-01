@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zyq.movehome.mapper.ResoucesMapper" >
+  <resultMap id="BaseResultMap" type="com.zyq.movehome.dto.ResoucesDTO" >
+    <id column="RID" property="rid" jdbcType="INTEGER" />
+    <result column="TID" property="tid" jdbcType="INTEGER" />
+    <result column="RNAME" property="rname" jdbcType="VARCHAR" />
+    <result column="RDESCRIPTION" property="rdescription" jdbcType="VARCHAR" />
+    <result column="RQUANTITY" property="rquantity" jdbcType="INTEGER" />
+    <result column="BUYTIME" property="buytime" jdbcType="TIMESTAMP" />
+    <result column="VALIDITY" property="validity" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+    <result column="PICTURE" property="picture" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    RID, TID, RNAME, RDESCRIPTION, RQUANTITY, BUYTIME, VALIDITY, STATUS, PICTURE
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from resouces
+    where RID = #{rid,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectList" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from resouces
+    where 1=1
+    <if test="rid != null" >
+      and RID =  #{rid,jdbcType=INTEGER}
+    </if>
+    <if test="tid != null and tid !=''" >
+      and TID =  #{tid,jdbcType=INTEGER}
+    </if>
+    <if test="rname != null" >
+      and RNAME =  #{rname,jdbcType=VARCHAR}
+    </if>
+    <if test="rdescription != null" >
+      and RDESCRIPTION =  #{rdescription,jdbcType=VARCHAR}
+    </if>
+    <if test="rquantity != null" >
+      and RQUANTITY =  #{rquantity,jdbcType=INTEGER}
+    </if>
+    <if test="buytime != null" >
+      and BUYTIME =  #{buytime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="validity != null" >
+      and VALIDITY =  #{validity,jdbcType=VARCHAR}
+    </if>
+    <if test="status != null" >
+      and STATUS =  #{status,jdbcType=VARCHAR}
+    </if>
+    <if test="picture != null" >
+     and PICTURE = #{picture,jdbcType=VARCHAR}
+    </if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from resouces
+    where RID = #{rid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.zyq.movehome.dto.ResoucesNewDTO" >
+    insert into resouces (RID, TID, RNAME, 
+      RDESCRIPTION, RQUANTITY, BUYTIME, 
+      VALIDITY, STATUS, PICTURE
+      )
+    values (#{rid,jdbcType=INTEGER}, #{tid,jdbcType=INTEGER}, #{rname,jdbcType=VARCHAR}, 
+      #{rdescription,jdbcType=VARCHAR}, #{rquantity,jdbcType=INTEGER}, #{buytime,jdbcType=TIMESTAMP}, 
+      #{validity,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{picture,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.zyq.movehome.dto.ResoucesNewDTO" >
+    insert into resouces
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="rid != null" >
+        RID,
+      </if>
+      <if test="tid != null" >
+        TID,
+      </if>
+      <if test="rname != null" >
+        RNAME,
+      </if>
+      <if test="rdescription != null" >
+        RDESCRIPTION,
+      </if>
+      <if test="rquantity != null" >
+        RQUANTITY,
+      </if>
+      <if test="buytime != null" >
+        BUYTIME,
+      </if>
+      <if test="validity != null" >
+        VALIDITY,
+      </if>
+      <if test="status != null" >
+        STATUS,
+      </if>
+      <if test="picture != null" >
+        PICTURE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="rid != null" >
+        #{rid,jdbcType=INTEGER},
+      </if>
+      <if test="tid != null" >
+        #{tid,jdbcType=INTEGER},
+      </if>
+      <if test="rname != null" >
+        #{rname,jdbcType=VARCHAR},
+      </if>
+      <if test="rdescription != null" >
+        #{rdescription,jdbcType=VARCHAR},
+      </if>
+      <if test="rquantity != null" >
+        #{rquantity,jdbcType=INTEGER},
+      </if>
+      <if test="buytime != null" >
+        #{buytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="validity != null" >
+        #{validity,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="picture != null" >
+        #{picture,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zyq.movehome.dto.ResoucesDTO" >
+    update resouces
+    <set >
+      <if test="tid != null" >
+        TID = #{tid,jdbcType=INTEGER},
+      </if>
+      <if test="rname != null" >
+        RNAME = #{rname,jdbcType=VARCHAR},
+      </if>
+      <if test="rdescription != null" >
+        RDESCRIPTION = #{rdescription,jdbcType=VARCHAR},
+      </if>
+      <if test="rquantity != null" >
+        RQUANTITY = #{rquantity,jdbcType=INTEGER},
+      </if>
+      <if test="buytime != null" >
+        BUYTIME = #{buytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="validity != null" >
+        VALIDITY = #{validity,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="picture != null" >
+        PICTURE = #{picture,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where RID = #{rid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zyq.movehome.dto.ResoucesDTO" >
+    update resouces
+    set TID = #{tid,jdbcType=INTEGER},
+      RNAME = #{rname,jdbcType=VARCHAR},
+      RDESCRIPTION = #{rdescription,jdbcType=VARCHAR},
+      RQUANTITY = #{rquantity,jdbcType=INTEGER},
+      BUYTIME = #{buytime,jdbcType=TIMESTAMP},
+      VALIDITY = #{validity,jdbcType=VARCHAR},
+      STATUS = #{status,jdbcType=VARCHAR},
+      PICTURE = #{picture,jdbcType=VARCHAR}
+    where RID = #{rid,jdbcType=INTEGER}
+  </update>
+</mapper>

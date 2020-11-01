@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>About</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <meta name="keywords" content=""/>
+
+    <script type="application/x-javascript">
+        addEventListener("load", function () {
+            setTimeout(hideURLbar, 0);
+        }, false);
+
+        function hideURLbar() {
+            window.scrollTo(0, 1);
+        }
+    </script>
+    <link rel="stylesheet" href="/css/bootstrap.css"> <!-- Bootstrap-Core-CSS -->
+    <link href="/css/style.css" rel='stylesheet' type='text/css'/>
+    <link href="/css/fontawesome-all.css" rel="stylesheet">
+    <link href="http://fonts.googleapis.com/css?family=Exo+2" rel="stylesheet">
+    <link href="http://fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i"
+          rel="stylesheet">
+    <!--	描述：elm -->
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="https://cdn.staticfile.org/axios/0.18.0/axios.min.js"></script>
+    <script src="base/plugins/jquery/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="base/dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="base/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <link rel="stylesheet" href="/css/common.css">
+    <!--elm  -->
+</head>
+
+<body>
+<header>
+    <div class="header">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="index.html">同城搬家供需信息交流平台</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item ">
+                        <a class="nav-link" href="/main">首页<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item  active">
+                        <a class="nav-link" href="/order">我的订单</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/moveteam">寻找搬家团队</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/myliuyan">我的留言</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link " href="/notice">公告</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span th:if=" ${session.user} ne null" th:text="${session.user.uname}"></span>
+                            <span th:if="${session.user} eq null " th:text="请登录"></span>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" th:if="${session.user} ne null" href="/loginup">
+                                <span th:if="${session.user} ne null " th:text="注销"></span>
+                            </a>
+                            <a class="dropdown-item" th:if="${session.user} eq null " href="/">
+                                <span th:if="${session.user} eq null " th:text="登录"></span>
+                            </a>
+                            <a href="#" class="dropdown-item" data-toggle="modal" data-target="#persionmessage"
+                               role="button">查看个人信息</a>
+                            <a href="#" class="dropdown-item" data-toggle="modal" data-target="#editmessage"
+                               role="button">编辑个人信息</a>
+                        </div>
+                    </li>
+                </ul>
+
+            </div>
+        </nav>
+    </div>
+</header>
+
+<div class="statistics py-5" style="height: 800px; ">
+    <input type="hidden" th:if="${session.user} ne null" id="myuname" th:value="${session.user.uname}">
+    <input type="hidden" th:if="${session.team} ne null" id="myteam" th:value="${session.team.tname}">
+
+    <div class="w3-head-all text-center mb-5">
+        <h3>我的订单记录</h3>
+    </div>
+    <div class="row" style="height: 800px; width: 100%;padding: 0px 20px 0px">
+        <div id="order" style="width: 100%;padding: 0px 20px 0px">
+            <el-table
+                    :data="myorders"
+                    style="width: 100%">
+                <el-table-column
+                        fixed
+                        prop="oid"
+                        label="订单编号"
+                        width="100">
+                </el-table-column>
+                <el-table-column
+                        prop="tname"
+                        label="团队名称"
+                        width="120">
+                </el-table-column>
+                <el-table-column
+                        prop="mbegin"
+                        width="120"
+                        label="搬家起点">
+                </el-table-column>
+                <el-table-column
+                        prop="mend"
+                        label="搬家终点"
+                        width="120">
+                </el-table-column>
+                <el-table-column
+                        prop="mtime"
+                        label="开始搬家时间"
+                        width="120">
+                </el-table-column>
+                <el-table-column
+                        prop="mattention"
+                        label="搬家注意事项"
+                        width="120">
+                </el-table-column>
+                <el-table-column
+                        prop="amount"
+                        label="订单金额(单位：元)"
+                        width="120">
+                </el-table-column>
+                <el-table-column
+                        prop="payfor"
+                        label="支付方式"
+                        width="120">
+                </el-table-column>
+                <el-table-column
+                        prop="status"
+                        label="订单状态"
+                        width="120">
+                    <template slot-scope="scope">
+                        <span style="color: red" v-if="scope.row.status=='0'">待接单</span>
+                        <span style="color: blue" v-else-if="scope.row.status=='1'">已接单-待完成</span>
+                        <span style="color: #00bbff" v-else-if="scope.row.status=='2'">已完成</span>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        prop="createtime"
+                        label="下单时间"
+                        width="120">
+                </el-table-column>
+                <el-table-column
+                        prop="finishtime"
+                        label="完成时间"
+                        width="120">
+                </el-table-column>
+                <el-table-column
+                        prop="scoring"
+                        label="订单平分"
+                        width="120">
+                </el-table-column>
+                <el-table-column
+                        fixed="right"
+                        label="操作"
+                        width="120">
+                    <template slot-scope="scope">
+                        <el-button v-if="scope.row.status=='1'" @click="handleClick(scope.row)" type="text"
+                                   size="small">已完成
+                        </el-button>
+
+                        <el-button v-if="scope.row.status=='0'||scope.row.status=='1'"
+                                   @click="delect(scope.row)"  type="text"  size="small">删除订单
+                        </el-button>
+
+                        <el-button v-if="scope.row.status=='2'" @click="addpinglun(scope.row)" type="text"
+                                   size="small">评论
+                        </el-button>
+                        <el-button  @click="look(scope.row)" type="text"
+                                   size="small">查看
+                        </el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <!-- 描述：分页操作-->
+            <div class="pagination" style="padding: 20px;text-align: center;">
+                <el-pagination background
+                               @current-change="handleCurrentChange"
+                               layout="prev, pager, next,total"
+                               :current-page="startPage" :prev-text="prev" :next-text="next"
+                               :total="total"
+                               :page-size="5"
+                />
+            </div>
+            <!--分页-->
+            <!--抽屉-->
+            <el-drawer
+                    title="请给订单评分 !"
+                    :before-close="handleClose"
+                    :visible.sync="dialog"
+                    direction="ltr"
+                    custom-class="demo-drawer"
+                    ref="drawer"
+            >
+                <div class="demo-drawer__content" style="height: 30%;">
+                    <el-form :model="pinglun">
+
+                        <el-form-item label="订单编号:" :label-width="formLabelWidth">
+                            <el-input v-model="pinglun.oid" autocomplete="off"></el-input>
+                        </el-form-item>
+                        <el-form-item label="团队名称:" :label-width="formLabelWidth">
+                            <el-input v-model="pinglun.tname" autocomplete="off"></el-input>
+                        </el-form-item>
+                        <el-form-item label="评论:" :label-width="formLabelWidth">
+                            <el-input v-model="pinglun.content" autocomplete="off"></el-input>
+                        </el-form-item>
+                        <el-form-item label="评分:" :label-width="formLabelWidth">
+                            <el-select v-model="pinglun.scoring" placeholder="请评分，最高分5分">
+                                <el-option label="1分" value="1分"></el-option>
+                                <el-option label="2分" value="2分"></el-option>
+                                <el-option label="3分" value="3分"></el-option>
+                                <el-option label="4分" value="4分"></el-option>
+                                <el-option label="5分" value="5分"></el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-form>
+                    <div class="demo-drawer__footer">
+                        <el-button @click="cancelForm">取 消</el-button>
+                        <el-button type="primary" @click="$refs.drawer.closeDrawer()" :loading="loading">{{ loading ? '提交中 ...' : '发布' }}</el-button>
+                    </div>
+                </div>
+            </el-drawer>
+<!--抽屉-->
+        </div>
+
+    </div>
+
+</div>
+
+<div class="footer-main">
+    <div class="footer-social">
+        <h4>关于平台</h4>
+        <ul>
+            <li>
+
+                <span class="fab fa-facebook-f icon_facebook"></span>
+                <p style="color: white;">服务范围为广东省广州市地区</p>
+
+            </li>
+
+        </ul>
+    </div>
+    <div class="cpy-right">
+        <p>2020-3-5 《同城搬家供需信息交流平台》平台联系人：曾运棋 联系电话：12345678910</p>
+    </div>
+</div>
+<!-- //footer -->
+<!-- odometer-script -->
+<script src="/js/odometer.js"></script>
+<script>
+    window.odometerOptions = {
+        format: '(ddd).dd'
+    };
+</script>
+<script>
+    setTimeout(function () {
+        jQuery('#w3l_stats1').html(25);
+    }, 1500);
+</script>
+<script>
+    setTimeout(function () {
+        jQuery('#w3l_stats2').html(330);
+    }, 1500);
+</script>
+<script>
+    setTimeout(function () {
+        jQuery('#w3l_stats3').html(542);
+    }, 1500);
+</script>
+<!-- //odometer-script -->
+
+<!-- js -->
+<script type="text/javascript" src="/js/jquery-2.2.3.min.js"></script>
+<script type="text/javascript" src="/js/bootstrap.js"></script> <!-- Necessary-JavaScript-File-For-Bootstrap -->
+<!-- //js -->
+<!-- start-smooth-scrolling -->
+<script src="/js/move-top.js"></script>
+<script src="/js/easing.js"></script>
+<script>
+    jQuery(document).ready(function ($) {
+        $(".scroll").click(function (event) {
+            event.preventDefault();
+
+            $('html,body').animate({
+                scrollTop: $(this.hash).offset().top
+            }, 1000);
+        });
+    });
+</script>
+<!-- //end-smooth-scrolling -->
+
+<!-- smooth-scrolling-of-move-up -->
+<script>
+    $(document).ready(function () {
+        $().UItoTop({
+            easingType: 'easeOutQuart'
+        });
+    });
+</script>
+<!-- //smooth-scrolling-of-move-up -->
+
+
+<!-- smooth scrolling js -->
+<script src="/js/SmoothScroll.min.js"></script>
+<!-- //smooth scrolling js -->
+<script>
+    new Vue({
+        el: '#app',
+        data: function () {
+            return {
+                form: {},
+            };
+        },
+        created() {
+            const that = this;
+            that.loan();
+        },
+        methods: {
+
+            loan() {
+//  	const that=this;
+                this.form = {
+                    uname: '曾运棋',
+                    sex: '1',
+                    email: '123@qq.com',
+                    identity: '4565564',
+                    phone: '12345648',
+                    birthday: '2020-14-2',
+                    signature: '你哈 ',
+                    address: '广州',
+                    registrationtime: '2020-02-30'
+                };
+            },
+        }
+//   
+    })
+</script>
+<script>
+    new Vue({
+        el: '#ap',
+        data: function () {
+            return {
+                editform: {},
+                postform: {},
+            };
+        },
+        created() {
+            const that = this;
+            that.getform();
+        },
+        methods: {
+
+            getform() {
+                this.editform = {
+                    uname: '曾运棋',
+                    sex: '1',
+                    email: '123@qq.com',
+                    identity: '4565564',
+                    phone: '12345648',
+                    birthday: '2020-14-2',
+                    signature:this.team.name,
+                    address: '广州',
+                    registrationtime: '2020-02-30'
+                };
+            },
+        }
+    })
+</script>
+<!--
+	作者：offline
+	时间：2020-03-09
+	描述：查看订单列表
+-->
+<script>
+    var myname = $("#myuname").val();
+    var mytname = $("#mytname").val();
+    new Vue({
+        el: '#order',
+        data: function () {
+            return {
+                myorders: [],
+                startPage: 1,
+                // 每页的数据
+                pageSize: 5,
+                total: 0,
+                table: false,
+                dialog: false,
+                loading: false,
+                pinglun: {
+                    oid: '',
+                    tname: '',
+                    content: '',
+                    scoring: ''
+                    //type:'1'
+                },
+                formLabelWidth: '80px',
+                timer: null,
+
+            };
+        },
+        created() {
+            const that = this;
+            that.getmyorder();
+        },
+        methods: {
+            getmyorder() {
+                var x = {
+                    uname: myname,
+                    tname: mytname,
+                    pn: this.startPage
+                }
+                axios.post('/order/selectmy', JSON.stringify(x), {
+                        headers: {
+                            'Content-Type': 'application/json;charset=UTF-8'
+                        }
+                    }
+                ).then(req => {
+                        if(req.data.success==false){
+                            alert(req.data.message);
+                            window.location.href=("/");
+                            return false;
+                        }
+                    this.myorders = req.data.data.list;
+                    this.total = req.data.data.total;
+
+                })
+
+            },
+            // 初始页currentPage、初始每页数据数pagesize和数据data
+            handleSizeChange(size) {
+                this.pageSize = size
+                this.getmyorder()
+            },
+            handleCurrentChange(startPage) {
+                this.startPage = startPage
+                this.getmyorder()
+            },
+            handleClick(row) {
+                var a = {
+                    oid: row.oid,
+                    type: "2"
+                }
+                axios.post('/order/edit', JSON.stringify(a), {
+                        headers: {
+                            'Content-Type': 'application/json;charset=UTF-8'
+                        }
+                    }
+                ).then(req => {
+
+                    window.location.href = "/order"
+                })
+            },
+            show(row) {
+                var a = {
+                    oid: row.oid,
+                    type: "2"
+                }
+                axios.post('/order/edit', JSON.stringify(a), {
+                        headers: {
+                            'Content-Type': 'application/json;charset=UTF-8'
+                        }
+                    }
+                ).then(req => {
+
+                    window.location.href = "/order"
+                })
+            },
+
+            addpinglun(add) {
+                this.dialog = true;
+                this.pinglun.oid = add.oid;
+                this.pinglun.tname = add.tname;
+            },
+            handleClose(done){
+                if (this.loading) {
+                    return;
+                }
+                this.$confirm('确定要发布评论吗？')
+                    .then(_ => {
+                        // this.loading = true;
+                        this.pinglun.type="1";
+                        this.timer = setTimeout(() => {
+                            axios.post('/pinglun/add', JSON.stringify(this.pinglun), {
+                                    headers: {
+                                        'Content-Type': 'application/json;charset=UTF-8'
+                                    }
+                                }
+                            ).then(req => {
+                                // 动画关闭需要一定的时间
+                                setTimeout(() => {
+                                    this.loading = false;
+                                }, 400);
+                                window.location.href = "/order"
+                        })
+
+                        }, 2000);
+                    })
+                ;
+            },
+            cancelForm() {
+                this.loading = false;
+                this.dialog = false;
+                clearTimeout(this.timer);
+            },
+            //取消订单
+            delect(val){
+                var a = {
+                    oid: val.oid,
+                    type: "3"
+                };
+                this.$confirm('是否删除订单?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    axios.post('/order/edit', JSON.stringify(a), {
+                            headers: {
+                                'Content-Type': 'application/json;charset=UTF-8'
+                            }
+                        }
+                    ).then(req => {
+                        this.$message({
+                            type: 'success',
+                            message: '删除成功!'
+
+                        });
+                       //window.location.href = "/order";
+                        this.getmyorder();
+                    })
+
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    })
+                })
+            },
+            //查看订单详情
+            look(row){
+                var x = row;
+                axios.post('/order/getorder', JSON.stringify(x), {
+                        headers: {
+                            'Content-Type': 'application/json;charset=UTF-8'
+                        }
+                    }
+                ).then(req => {
+                    window.location.href="order/pinglun";
+                })
+
+            }
+        }
+    })
+</script>
+</body>
+</html>

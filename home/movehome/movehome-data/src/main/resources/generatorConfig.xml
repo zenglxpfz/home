@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+  <classPathEntry location="E:\maven\RepMaven\mysql\mysql-connector-java\5.1.18\mysql-connector-java-5.1.18.jar"/>
+  <context id="context1">
+  	<commentGenerator>
+        <property name="suppressAllComments" value="true" />
+    </commentGenerator>
+    <jdbcConnection
+            connectionURL="jdbc:mysql://localhost:3306/home"
+
+    driverClass="com.mysql.jdbc.Driver"
+            password="1234"
+            userId="root"
+    />
+    <javaModelGenerator targetPackage="com.zyq.movehome.dto" targetProject="src/main/java" />
+    <!--xml配置文件位置-->
+    <sqlMapGenerator targetPackage="com.zyq.movehome.mapper" targetProject="src/main/resources" />
+    <javaClientGenerator targetPackage="com.zyq.movehome.mapper" targetProject="src/main/java" type="XMLMAPPER" />
+
+    <!--<table tableName="user" domainObjectName="User" enableCountByExample="false"-->
+           <!--enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false"-->
+           <!--selectByExampleQueryId="false">-->
+    <!--</table>-->
+    <!--<table tableName="userservice" domainObjectName="Userservice" enableCountByExample="false"-->
+           <!--enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false"-->
+           <!--selectByExampleQueryId="false">-->
+    <!--</table>-->
+    <!--<table tableName="u_role" domainObjectName="Urole" enableCountByExample="false"-->
+           <!--enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false"-->
+           <!--selectByExampleQueryId="false">-->
+    <!--</table>-->
+    <!--<table tableName="role" domainObjectName="Role" enableCountByExample="false"-->
+           <!--enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false"-->
+           <!--selectByExampleQueryId="false">-->
+    <!--</table>-->
+    <!--<table tableName="admin" domainObjectName="Admin" enableCountByExample="false"-->
+           <!--enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false"-->
+           <!--selectByExampleQueryId="false">-->
+    <!--</table>-->
+    <!--<table tableName="team" domainObjectName="Team" enableCountByExample="false"-->
+           <!--enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false"-->
+           <!--selectByExampleQueryId="false">-->
+    <!--</table>-->
+      <!--<table tableName="content" domainObjectName="Content" enableCountByExample="false"-->
+             <!--enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false"-->
+             <!--selectByExampleQueryId="false">-->
+      <!--</table>-->
+      <!--<table tableName="resouces" domainObjectName="Resouces" enableCountByExample="false"-->
+             <!--enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false"-->
+             <!--selectByExampleQueryId="false">-->
+      <!--</table>-->
+      <!--<table tableName="message" domainObjectName="Message" enableCountByExample="false"-->
+             <!--enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false"-->
+             <!--selectByExampleQueryId="false">-->
+      <!--</table>-->
+      <table tableName="notice" domainObjectName="Notice" enableCountByExample="false"
+             enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
+             selectByExampleQueryId="false">
+      </table>
+      <!--<table tableName="appraisal" domainObjectName="Appraisal" enableCountByExample="false"-->
+             <!--enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false"-->
+             <!--selectByExampleQueryId="false">-->
+      <!--</table>-->
+      <!--<table tableName="reporting" domainObjectName="Reporting" enableCountByExample="false"-->
+             <!--enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false"-->
+             <!--selectByExampleQueryId="false">-->
+      <!--</table>-->
+    <!--<table tableName="imi_message_record_details" domainObjectName="MessageRecordDetailsDTO" enableCountByExample="false"-->
+           <!--enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false"-->
+           <!--selectByExampleQueryId="false">-->
+    <!--</table>-->
+
+  </context>
+</generatorConfiguration>

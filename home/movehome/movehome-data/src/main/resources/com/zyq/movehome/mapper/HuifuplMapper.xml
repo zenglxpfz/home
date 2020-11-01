@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zyq.movehome.mapper.HuifuplMapper" >
+  <resultMap id="BaseResultMap" type="com.zyq.movehome.dto.HuifuplDTO" >
+    <id column="AID" property="aid" jdbcType="INTEGER" />
+    <result column="FID" property="fid" jdbcType="INTEGER" />
+    <result column="CONTENT" property="content" jdbcType="VARCHAR" />
+    <result column="ZID" property="zid" jdbcType="INTEGER" />
+    <result column="TYPE" property="type" jdbcType="VARCHAR" />
+    <result column="USEID" property="useid" jdbcType="INTEGER" />
+    <result column="USEDID" property="usedid" jdbcType="INTEGER" />
+    <result column="USERNAME" property="username" jdbcType="VARCHAR" />
+    <result column="USEREDNAME" property="useredname" jdbcType="VARCHAR" />
+    <result column="CREATETIME" property="createtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    AID, FID, CONTENT, ZID, TYPE, USEID, USEDID, USERNAME, USEREDNAME, createtime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from huifupl
+    where AID = #{aid,jdbcType=INTEGER}
+  </select>
+  <select id="selectcountByFid" resultType="java.lang.Integer" parameterType="java.lang.Integer" >
+    select
+   count(FID)
+    from appraisal
+    where FID = #{fid,jdbcType=INTEGER}
+    group by FID
+  </select>
+
+  <select id="selectbyFid" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from huifupl
+    where FID = #{fid,jdbcType=INTEGER}
+    order by CREATETIME
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from huifupl
+    where AID = #{aid,jdbcType=INTEGER}
+  </delete>
+
+  <delete id="deleceByfid" parameterType="java.lang.Integer" >
+    delete from huifupl
+    where FID = #{aid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.zyq.movehome.dto.HuifuplDTO" >
+    insert into huifupl (AID, FID, CONTENT, 
+      ZID, TYPE, USEID, USEDID, 
+      USERNAME, USEREDNAME, CREATETIME
+      )
+    values (#{aid,jdbcType=INTEGER}, #{fid,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR}, 
+      #{zid,jdbcType=INTEGER}, #{type,jdbcType=VARCHAR}, #{useid,jdbcType=INTEGER}, #{usedid,jdbcType=INTEGER}, 
+      #{username,jdbcType=VARCHAR}, #{useredname,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.zyq.movehome.dto.HuifuplDTO" >
+    insert into huifupl
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="aid != null" >
+        AID,
+      </if>
+      <if test="fid != null" >
+        FID,
+      </if>
+      <if test="content != null" >
+        CONTENT,
+      </if>
+      <if test="zid != null" >
+        ZID,
+      </if>
+      <if test="type != null" >
+        TYPE,
+      </if>
+      <if test="useid != null" >
+        USEID,
+      </if>
+      <if test="usedid != null" >
+        USEDID,
+      </if>
+      <if test="username != null" >
+        USERNAME,
+      </if>
+      <if test="useredname != null" >
+        USEREDNAME,
+      </if>
+      <if test="createtime != null" >
+        CREATETIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="aid != null" >
+        #{aid,jdbcType=INTEGER},
+      </if>
+      <if test="fid != null" >
+        #{fid,jdbcType=INTEGER},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="zid != null" >
+        #{zid,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="useid != null" >
+        #{useid,jdbcType=INTEGER},
+      </if>
+      <if test="usedid != null" >
+        #{usedid,jdbcType=INTEGER},
+      </if>
+      <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="useredname != null" >
+        #{useredname,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zyq.movehome.dto.HuifuplDTO" >
+    update huifupl
+    <set >
+      <if test="fid != null" >
+        FID = #{fid,jdbcType=INTEGER},
+      </if>
+      <if test="content != null" >
+        CONTENT = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="zid != null" >
+        ZID = #{zid,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        TYPE = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="useid != null" >
+        USEID = #{useid,jdbcType=INTEGER},
+      </if>
+      <if test="usedid != null" >
+        USEDID = #{usedid,jdbcType=INTEGER},
+      </if>
+      <if test="username != null" >
+        USERNAME = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="useredname != null" >
+        USEREDNAME = #{useredname,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        CREATETIME = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where AID = #{aid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zyq.movehome.dto.HuifuplDTO" >
+    update huifupl
+    set FID = #{fid,jdbcType=INTEGER},
+      CONTENT = #{content,jdbcType=VARCHAR},
+      ZID = #{zid,jdbcType=INTEGER},
+      TYPE = #{type,jdbcType=VARCHAR},
+      USEID = #{useid,jdbcType=INTEGER},
+      USEDID = #{usedid,jdbcType=INTEGER},
+      USERNAME = #{username,jdbcType=VARCHAR},
+      USEREDNAME = #{useredname,jdbcType=VARCHAR},
+      CREATETIME = #{createtime,jdbcType=TIMESTAMP}
+    where AID = #{aid,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zyq.movehome.mapper.AppraisalMapper" >
+  <resultMap id="BaseResultMap" type="com.zyq.movehome.dto.AppraisalDTO" >
+    <id column="AID" property="aid" jdbcType="INTEGER" />
+    <result column="OID" property="oid" jdbcType="INTEGER" />
+    <result column="UID" property="uid" jdbcType="INTEGER" />
+    <result column="TID" property="tid" jdbcType="INTEGER" />
+    <result column="CONTENT" property="content" jdbcType="VARCHAR" />
+    <result column="SCORING" property="scoring" jdbcType="VARCHAR" />
+    <result column="CREATETIME" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="TYPE" property="type" jdbcType="VARCHAR" />
+    <result column="ZID" property="zid" jdbcType="INTEGER" />
+    <result column="UNAME" property="uname" jdbcType="VARCHAR" />
+    <result column="TNAME" property="tname" jdbcType="VARCHAR" />
+
+  </resultMap>
+  <sql id="Base_Column_List" >
+    AID, OID, UID, TID, CONTENT, SCORING, CREATETIME,ZID,TYPE,UNAME,TNAME
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from appraisal
+    where AID = #{aid,jdbcType=INTEGER} and TYPE = "1"
+  </select>
+
+  <select id="selectByBid" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from appraisal
+    where ZID = #{zid,jdbcType=INTEGER} and TYPE = "2"
+  </select>
+
+  <select id="selectByParamkeyType" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from appraisal
+    where AID = #{Aid,jdbcType=INTEGER} and TYPE = "2"
+  </select>
+
+  <select id="selectByoid" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from appraisal
+    where OID = #{oid,jdbcType=INTEGER} and TYPE = "1"
+  </select>
+  <!--统计订单评论数-->
+  <select id="selectcountByoid" resultType="java.lang.Integer" parameterType="java.lang.Integer" >
+    select
+    count(OID)
+    from appraisal
+    where OID = #{oid,jdbcType=INTEGER} and TYPE = "1"
+    group by OID
+  </select>
+  <!--统计文章评论数-->
+  <select id="selectcountByzid" resultType="java.lang.Integer" parameterType="java.lang.Integer" >
+    select
+   count(ZID)
+    from appraisal
+    where ZID = #{zid,jdbcType=INTEGER} and TYPE = "2"
+    group by ZID
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" parameterType="com.zyq.movehome.dto.AppraisalDTO" >
+    select
+    <include refid="Base_Column_List" />
+    from appraisal
+    <where>
+      <if test="aid != null" >
+       and  AID= #{aid,jdbcType=INTEGER}
+      </if>
+      <if test="oid != null" >
+        and  OID= #{oid,jdbcType=INTEGER}
+      </if>
+      <if test="uid != null" >
+        and  UID= #{uid,jdbcType=INTEGER}
+      </if>
+      <if test="tid != null" >
+        and  TID= #{tid,jdbcType=INTEGER}
+      </if>
+      <if test="content != null" >
+        and  CONTENT= #{content,jdbcType=VARCHAR}
+      </if>
+      <if test="scoring != null" >
+        and  SCORING= #{scoring,jdbcType=VARCHAR}
+      </if>
+      <if test="createtime != null" >
+        and CREATETIME = #{createtime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="zid != null" >
+        and  ZID= #{zid,jdbcType=INTEGER}
+      </if>
+      <if test="type != null" >
+        and  TYPE= #{type,jdbcType=VARCHAR}
+      </if>
+      <if test="uname != null" >
+        and  UNAME= #{uname,jdbcType=VARCHAR}
+      </if>
+      <if test="tname != null" >
+        and  TNAME= #{tname,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from appraisal
+    where AID = #{aid,jdbcType=INTEGER}
+  </delete>
+
+  <delete id="delectByzid" parameterType="java.lang.Integer" >
+    delete from appraisal
+    where ZID = #{bid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.zyq.movehome.dto.AppraisalNewDTO" >
+    insert into appraisal (AID, OID, UID, 
+      TID, CONTENT, SCORING, 
+      CREATETIME,ZID,TYPE,TNAME,UNAME)
+    values (#{aid,jdbcType=INTEGER}, #{oid,jdbcType=INTEGER}, #{uid,jdbcType=INTEGER}, 
+      #{tid,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR}, #{scoring,jdbcType=VARCHAR}, 
+      #{createtime,jdbcType=TIMESTAMP},#{zid,jdbcType=INTEGER}, #{type,jdbcType=VARCHAR},#{tname,jdbcType=VARCHAR},#{uname,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zyq.movehome.dto.AppraisalNewDTO" >
+    insert into appraisal
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="aid != null" >
+        AID,
+      </if>
+      <if test="oid != null" >
+        OID,
+      </if>
+      <if test="uid != null" >
+        UID,
+      </if>
+      <if test="tid != null" >
+        TID,
+      </if>
+      <if test="content != null" >
+        CONTENT,
+      </if>
+      <if test="zid != null" >
+        ZID,
+      </if>
+      <if test="type != null" >
+        TYPE,
+      </if>
+      <if test="scoring != null" >
+        SCORING,
+      </if>
+      <if test="createtime != null" >
+        CREATETIME,
+      </if>
+      <if test="uname != null" >
+        UNAME,
+      </if>
+      <if test="tname != null" >
+        TNAME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="aid != null" >
+        #{aid,jdbcType=INTEGER},
+      </if>
+      <if test="oid != null" >
+        #{oid,jdbcType=INTEGER},
+      </if>
+      <if test="uid != null" >
+        #{uid,jdbcType=INTEGER},
+      </if>
+      <if test="tid != null" >
+        #{tid,jdbcType=INTEGER},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="zid != null" >
+        #{zid,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="scoring != null" >
+        #{scoring,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="uname != null" >
+        #{uname,jdbcType=VARCHAR},
+      </if>
+      <if test="tname != null" >
+        #{tname,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zyq.movehome.dto.AppraisalDTO" >
+    update appraisal
+    <set >
+      <if test="oid != null" >
+        OID = #{oid,jdbcType=INTEGER},
+      </if>
+      <if test="uid != null" >
+        UID = #{uid,jdbcType=INTEGER},
+      </if>
+      <if test="tid != null" >
+        TID = #{tid,jdbcType=INTEGER},
+      </if>
+      <if test="content != null" >
+        CONTENT = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="zid != null" >
+        ZID = #{zid,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        TYPE = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="scoring != null" >
+        SCORING = #{scoring,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        CREATETIME = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="uname != null" >
+        UNAME = #{uname,jdbcType=VARCHAR},
+      </if>
+      <if test="tname != null" >
+        TNAME = #{tname,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where AID = #{aid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zyq.movehome.dto.AppraisalDTO" >
+    update appraisal
+    set OID = #{oid,jdbcType=INTEGER},
+      UID = #{uid,jdbcType=INTEGER},
+      TID = #{tid,jdbcType=INTEGER},
+      CONTENT = #{content,jdbcType=VARCHAR},
+       ZID = #{zid,jdbcType=INTEGER},
+      TYPE = #{type,jdbcType=VARCHAR},
+      SCORING = #{scoring,jdbcType=VARCHAR},
+      CREATETIME = #{createtime,jdbcType=TIMESTAMP},
+       TNAME = #{tname,jdbcType=VARCHAR},
+         UNAME = #{uname,jdbcType=VARCHAR}
+    where AID = #{aid,jdbcType=INTEGER}
+  </update>
+
+
+</mapper>

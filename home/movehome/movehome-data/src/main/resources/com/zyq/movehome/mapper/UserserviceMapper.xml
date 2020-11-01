@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zyq.movehome.mapper.UserserviceMapper" >
+  <resultMap id="BaseResultMap" type="com.zyq.movehome.dto.UserserviceDTO" >
+    <id column="UID" property="uid" jdbcType="INTEGER" />
+    <result column="UNAME" property="uname" jdbcType="VARCHAR" />
+    <result column="PASSWORD" property="password" jdbcType="VARCHAR" />
+    <result column="SEX" property="sex" jdbcType="VARCHAR" />
+    <result column="EMAIL" property="email" jdbcType="VARCHAR" />
+    <result column="IDENTITY" property="identity" jdbcType="VARCHAR" />
+    <result column="PHONE" property="phone" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+    <result column="BIRTHDAY" property="birthday" jdbcType="VARCHAR" />
+    <result column="SIGNATURE" property="signature" jdbcType="VARCHAR" />
+    <result column="ADDRESS" property="address" jdbcType="VARCHAR" />
+    <result column="PICTURE" property="picture" jdbcType="VARCHAR" />
+    <result column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="ROLE" property="role" jdbcType="VARCHAR" />
+    <result column="REGISTRATIONTIME" property="registrationtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    UID, UNAME, PASSWORD, SEX, EMAIL, IDENTITY, PHONE, STATUS, BIRTHDAY, SIGNATURE, ADDRESS, 
+    PICTURE, CODE, ROLE, REGISTRATIONTIME
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from userservice
+    where UID = #{uid,jdbcType=INTEGER}
+  </select>
+  <select id="selectbykey" resultMap="BaseResultMap" parameterType="com.zyq.movehome.dto.SouDTO" >
+    select
+    <include refid="Base_Column_List" />
+    from userservice
+    where UNAME like concat('%',#{tname},'%')
+  </select>
+  <select id="selectUserserviceBynameAndpassword" resultMap="BaseResultMap" parameterType="com.zyq.movehome.dto.UserserviceDTO" >
+    select
+    <include refid="Base_Column_List" />
+    from userservice
+    where UNAME = #{uname,jdbcType=VARCHAR} and PASSWORD = #{password,jdbcType=VARCHAR}
+  </select>
+  <!--查询没有团队码的用户-->
+  <select id="selectnullcode" resultMap="BaseResultMap" parameterType="com.zyq.movehome.dto.UserserviceDTO" >
+    select
+    <include refid="Base_Column_List" />
+    from userservice
+    where  CODE = 0 and STATUS = 0
+  </select>
+  <select id="selectUserservice" resultMap="BaseResultMap" parameterType="com.zyq.movehome.dto.UserserviceDTO">
+    select <include refid="Base_Column_List"></include>
+    from userservice
+    where 1=1
+    <if test="uid != null" >
+      and UID = #{uid,jdbcType=INTEGER}
+    </if>
+    <if test="uname != null and uname !=''" >
+      and UNAME like concat('%',#{uname,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="password != null and password !=''" >
+      and PASSWORD = #{password,jdbcType=VARCHAR}
+    </if>
+    <if test="sex != null and sex !=''" >
+      and SEX = #{sex,jdbcType=VARCHAR}
+    </if>
+    <if test="email != null and email !=''" >
+      and EMAIL = #{email,jdbcType=VARCHAR}
+    </if>
+    <if test="identity != null and identity !=''" >
+      and IDENTITY = #{identity,jdbcType=VARCHAR}
+    </if>
+    <if test="phone != null and phone !=''" >
+      and PHONE = #{phone,jdbcType=VARCHAR}
+    </if>
+    <if test="status != null and status !=''" >
+      and STATUS = #{status,jdbcType=VARCHAR}
+    </if>
+    <if test="birthday != null and birthday !=''" >
+      and BIRTHDAY = #{birthday,jdbcType=VARCHAR}
+    </if>
+    <if test="signature != null and signature !=''" >
+      and SIGNATURE = #{signature,jdbcType=VARCHAR}
+    </if>
+    <if test="address != null and address !=''" >
+      and ADDRESS = #{address,jdbcType=VARCHAR}
+    </if>
+    <if test="picture != null and  picture !=''" >
+     and PICTURE = #{picture,jdbcType=VARCHAR}
+    </if>
+    <if test="code != null and code !='' " >
+     and CODE = #{code,jdbcType=VARCHAR}
+    </if>
+    <if test="role != null and role !=''" >
+     and  ROLE = #{role,jdbcType=VARCHAR}
+    </if>
+    <if test="registrationtime != null" >
+      and  REGISTRATIONTIME = #{registrationtime,jdbcType=TIMESTAMP}
+    </if>
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from userservice
+    where UID = #{uid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.zyq.movehome.dto.UserserviceNewDTO" >
+    insert into userservice (UID, UNAME, PASSWORD, 
+      SEX, EMAIL, IDENTITY, 
+      PHONE, STATUS, BIRTHDAY, 
+      SIGNATURE, ADDRESS, PICTURE, 
+      CODE, ROLE, REGISTRATIONTIME
+      )
+    values (#{uid,jdbcType=INTEGER}, #{uname,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
+      #{sex,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{identity,jdbcType=VARCHAR}, 
+      #{phone,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{birthday,jdbcType=VARCHAR}, 
+      #{signature,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{picture,jdbcType=VARCHAR}, 
+      #{code,jdbcType=VARCHAR}, #{role,jdbcType=VARCHAR}, #{registrationtime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" keyProperty="uid" useGeneratedKeys="true"  parameterType="com.zyq.movehome.dto.UserserviceNewDTO" >
+    insert into userservice
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="uid != null" >
+        UID,
+      </if>
+    <if test="uname != null and uname !=''" >
+      UNAME,
+    </if>
+    <if test="password != null and password !=''" >
+      PASSWORD,
+    </if>
+    <if test="sex != null and sex !=''" >
+      SEX,
+    </if>
+    <if test="email != null  and email !=''"  >
+      EMAIL,
+    </if>
+    <if test="identity != null  and identity !=''" >
+      IDENTITY,
+    </if>
+    <if test="phone != null  and phone !=''" >
+      PHONE,
+    </if>
+    <if test="status != null  and status !=''" >
+      STATUS,
+    </if>
+    <if test="birthday != null  and birthday !=''" >
+      BIRTHDAY,
+    </if>
+    <if test="signature != null  and signature!=''" >
+      SIGNATURE,
+    </if>
+    <if test="address != null  and address!=''" >
+      ADDRESS,
+    </if>
+      <if test="picture != null and picture !=''" >
+        PICTURE,
+      </if>
+      <if test="code != null and code !=''" >
+        CODE,
+      </if>
+      <if test="role != null and role!=''" >
+        ROLE,
+      </if>
+    <if test="registrationtime != null" >
+      REGISTRATIONTIME,
+    </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="uid != null" >
+        #{uid,jdbcType=INTEGER},
+      </if>
+      <if test="uname != null and uname !=''" >
+        #{uname,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null and password !=''" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null and sex !=''" >
+        #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null and email !=''" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="identity != null and identity !=''" >
+        #{identity,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null and phone !=''" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null and status !=''" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null and birthday !=''" >
+        #{birthday,jdbcType=VARCHAR},
+      </if>
+      <if test="signature != null and signature !=''" >
+        #{signature,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null and address !=''" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+
+      <if test="picture != null and  picture !=''" >
+        #{picture,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null and code !='' " >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="role != null and role !=''" >
+        #{role,jdbcType=VARCHAR},
+      </if>
+      <if test="registrationtime != null" >
+        #{registrationtime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zyq.movehome.dto.UserserviceDTO" >
+    update userservice
+    <set >
+      <if test="uname != null" >
+        UNAME = #{uname,jdbcType=INTEGER},
+      </if>
+      <if test="password != null" >
+        PASSWORD = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        SEX = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        EMAIL = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="identity != null" >
+        IDENTITY = #{identity,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        PHONE = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null" >
+        BIRTHDAY = #{birthday,jdbcType=VARCHAR},
+      </if>
+      <if test="signature != null" >
+        SIGNATURE = #{signature,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        ADDRESS = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="picture != null" >
+        PICTURE = #{picture,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null" >
+        CODE = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="role != null" >
+        ROLE = #{role,jdbcType=VARCHAR},
+      </if>
+      <if test="registrationtime != null" >
+        REGISTRATIONTIME = #{registrationtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where UID = #{uid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zyq.movehome.dto.UserserviceDTO" >
+    update userservice
+    set UNAME = #{uname,jdbcType=VARCHAR},
+      PASSWORD = #{password,jdbcType=VARCHAR},
+      SEX = #{sex,jdbcType=VARCHAR},
+      EMAIL = #{email,jdbcType=VARCHAR},
+      IDENTITY = #{identity,jdbcType=VARCHAR},
+      PHONE = #{phone,jdbcType=VARCHAR},
+      STATUS = #{status,jdbcType=VARCHAR},
+      BIRTHDAY = #{birthday,jdbcType=VARCHAR},
+      SIGNATURE = #{signature,jdbcType=VARCHAR},
+      ADDRESS = #{address,jdbcType=VARCHAR},
+      PICTURE = #{picture,jdbcType=VARCHAR},
+      CODE = #{code,jdbcType=VARCHAR},
+      ROLE = #{role,jdbcType=VARCHAR},
+      REGISTRATIONTIME = #{registrationtime,jdbcType=TIMESTAMP}
+    where UID = #{uid,jdbcType=INTEGER}
+  </update>
+</mapper>

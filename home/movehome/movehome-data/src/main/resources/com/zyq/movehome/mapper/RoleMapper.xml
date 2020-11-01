@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zyq.movehome.mapper.RoleMapper" >
+  <resultMap id="BaseResultMap" type="com.zyq.movehome.dto.RoleDTO" >
+    <id column="URID" property="urid" jdbcType="INTEGER" />
+    <result column="ROLE" property="role" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    URID, ROLE
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from role
+    where URID = #{urid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from role
+    where URID = #{urid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.zyq.movehome.dto.RoleDTO" >
+    insert into role (URID, ROLE)
+    values (#{urid,jdbcType=INTEGER}, #{role,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zyq.movehome.dto.RoleDTO" >
+    insert into role
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="urid != null" >
+        URID,
+      </if>
+      <if test="role != null and role !=''" >
+        ROLE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="urid != null" >
+        #{urid,jdbcType=INTEGER},
+      </if>
+      <if test="role != null and role !=''" >
+        #{role,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zyq.movehome.dto.RoleDTO" >
+    update role
+    <set >
+      <if test="role != null" >
+        ROLE = #{role,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where URID = #{urid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zyq.movehome.dto.RoleDTO" >
+    update role
+    set ROLE = #{role,jdbcType=VARCHAR}
+    where URID = #{urid,jdbcType=INTEGER}
+  </update>
+</mapper>

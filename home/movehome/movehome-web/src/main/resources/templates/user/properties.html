@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title>Properties</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta charset="utf-8">
+	<meta name="keywords" content="" />
+
+	<script type="application/x-javascript">
+		addEventListener("load", function () {
+			setTimeout(hideURLbar, 0);
+		}, false);
+
+		function hideURLbar() {
+			window.scrollTo(0, 1);
+		}
+	</script>
+	<link rel="stylesheet" href="/css/bootstrap.css"> <!-- Bootstrap-Core-CSS -->
+	<link href="/css/style.css" rel='stylesheet' type='text/css' />
+		<link href="/css/simpleLightbox.css" rel="stylesheet" type="text/css" /><!-- gallery css -->
+	<link href="/css/fontawesome-all.css" rel="stylesheet">
+	<link href="http://fonts.googleapis.com/css?family=Exo+2" rel="stylesheet">
+	<link href="http://fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+ <!--	描述：elm -->
+  <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="https://cdn.staticfile.org/axios/0.18.0/axios.min.js"></script>
+    <script src="base/plugins/jquery/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="base/dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="base/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+
+    <!--elm  -->
+</head>
+
+<body>
+<header>
+	<div class="header">
+		<nav class="navbar navbar-expand-lg navbar-light bg-light">
+		  <a class="navbar-brand" href="index.html">同城搬家供需信息交流平台</a>
+		  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		  </button>
+		  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav ml-auto">
+                  <li class="nav-item ">
+                      <a class="nav-link" href="/main">首页<span class="sr-only">(current)</span></a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="/order">我的订单</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="/moveteam">寻找搬家团队</a>
+                  </li>
+                  <li class="nav-item" active>
+                      <a class="nav-link" href="/myliuyan">我的留言</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link " href="/notice">告示</a>
+                  </li>
+                  <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <span th:if=" ${session.user} ne null" th:text="${session.user.uname}"></span>
+                          <span th:if="${session.user} eq null " th:text="请登录"></span>
+                      </a>
+                      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                          <a class="dropdown-item" th:if="${session.user} ne null" href="/loginup">
+                              <span th:if="${session.user} ne null " th:text="注销"></span>
+                          </a>
+                          <a class="dropdown-item" th:if="${session.user} eq null " href="/">
+                              <span th:if="${session.user} eq null " th:text="登录"></span>
+                          </a>
+                          <a href="#" class="dropdown-item" data-toggle="modal" data-target="#persionmessage"
+                             role="button">查看个人信息</a>
+                          <a href="#" class="dropdown-item" data-toggle="modal" data-target="#editmessage"
+                             role="button">编辑个人信息</a>
+                      </div>
+                  </li>
+              </ul>
+
+		  </div>
+		</nav>
+		</div>
+</header>
+<!--/inner_banner-->
+	
+<!-- gallery -->
+        <input type="hidden" th:if="${session.user ne null}" th:value="${session.user.uid}" id="uid" />
+        <input type="hidden" th:if="${session.user ne null}" th:value="${session.user.uname}" id="uname" />
+
+        <div class="w3-head-all text-center mb-5">
+			<h3>我的留言消息</h3>
+		</div>
+<div id="order">
+		<div class="w3ls_gallery_grids row">
+
+                <div style="height: auto;width: 100%;" v-for="(o, index) in liuyan" :key="o" :offset="index > 0 ? 1 : 0">
+
+                    <div class="row" style="padding: 30px">
+                        <div class="col-6-md">
+                            <h5>{{o.tname}}</h5>
+                            <span style="font-size: 10px;">{{o.createtime}}</span><br/>
+
+                            <span>{{o.content}}</span>
+                        </div>
+                        <div class="col-3-md ">
+                            <span></span>
+
+                        </div>
+                        <div class="col-3-md " style="padding: 30px 20px">
+                            <!--<el-button  type="button" @click="del(o)">删除</el-button>-->
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <div class="col-md-8">
+                            <el-collapse v-model="activeNames" @change="handleChange">
+                                <el-collapse-item title="查看回复" name="4">
+                                    <div style="height: auto;">
+
+                                        <div v-for="(h, index1) in o.mhuifuDTOS" :key="a" :offset="index > 0 ? 1 : 0">
+                                            <div class="row">
+                                                <div class="col-md-10">
+                                                    <a href="javascript:void(0);" @click="x(h,index)">{{h.username}}</a>回复
+                                                    <a href="javascript:void(0);" @click="y(h,index)">{{h.useredname}}</a>：{{h.content}}
+
+                                                    <span>{{h.createtime}}</span>
+
+                                                </div>
+                                                <div class="col-md-2 " style="padding: 20px">
+                                                    <button type="button" th:class="btn-danger" @click="delhuifu(h,index)">删除</button>
+                                                </div>
+                                            </div>
+                                            <br />
+                                            <!--<el-button @click="dialogVisible = true">回复</el-button>-->
+                                        </div>
+                                        <div class="row" >
+                                            <el-input maxlength="30" style="width: 80%"  show-word-limit type="textarea" v-model="a[index].content" :placeholder="'回复'+a[index].name"/>
+                                            <button @click="re(index)">回复</button>
+                                        </div>
+                                    </div>
+                                </el-collapse-item>
+                            </el-collapse>
+                        </div>
+                    </div>
+                </div>
+		</div>
+         </div>
+
+
+<!--
+	作者：offline
+	时间：2020-03-08
+	描述：个人信息模态框 data-toggle="modal" data-target="#persionmessage"
+-->
+<!--<div class="modal fade" id="persionmessage" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title text-uppercase" id="exampleModalLongTitle">我的信息</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    <div id="app" class="modal-body">
+      	<el-form ref="form" :model="form" label-width="80px">
+      		
+  <el-form-item label="姓名">
+    <el-input v-model="form.uname" :readonly="true" ></el-input>
+  </el-form-item>
+  <el-form-item label="性别">
+   <el-radio-group v-model="form.sex" :readonly="true">
+      <el-radio label="1" :readonly="true">男</el-radio>
+      <el-radio label="2" :readonly="true">女</el-radio>
+    </el-radio-group>
+  </el-form-item>
+  <el-form-item label="身份证号">
+    <el-input v-model="form.identity" :readonly="true" ></el-input>
+  </el-form-item>
+  <el-form-item label="邮箱">
+   <el-input v-model="form.email" :readonly="true" ></el-input>
+  </el-form-item>
+  <el-form-item label="手机号码">
+    <el-input  v-model="form.phone" :readonly="true"></el-input>
+  </el-form-item>
+  <el-form-item label="出生日期">
+    <el-input  v-model="form.birthday" :readonly="true"></el-input>
+  </el-form-item>
+  <el-form-item label="个人说明">
+    <el-input  v-model="form.signature" :readonly="true"></el-input>
+  </el-form-item>
+  <el-form-item label="住址">
+    <el-input  v-model="form.address" :readonly="true"></el-input>
+  </el-form-item>
+  <el-form-item label="注册时间">
+    <el-input  v-model="form.registrationtime" :readonly="true"></el-input>
+  </el-form-item>
+</el-form>		
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+       </div>
+    </div>
+  </div>
+</div>
+修改-->
+<!-- <div class="modal fade" id="editmessage" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title text-uppercase" id="exampleModalLongTitle">编辑我的信息</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div id="ap" class="modal-body">
+      	<el-form ref="form" :model="editform" label-width="80px">
+      		
+  <el-form-item label="姓名">
+    <el-input v-model="editform.uname"  ></el-input>
+  </el-form-item>
+  <el-form-item label="性别">
+   <el-radio-group v-model="editform.sex" >
+      <el-radio label="1">男</el-radio>
+      <el-radio label="2">女</el-radio>
+    </el-radio-group>
+  </el-form-item>
+  <el-form-item label="身份证号">
+    <el-input v-model="editform.identity"  ></el-input>
+  </el-form-item>
+  <el-form-item label="邮箱">
+   <el-input v-model="editform.email"  ></el-input>
+  </el-form-item>
+  <el-form-item label="手机号码">
+    <el-checkbox-group v-model="form.type">
+      <el-checkbox label="美食/餐厅线上活动" name="type"></el-checkbox>
+      <el-checkbox label="地推活动" name="type"></el-checkbox>
+      <el-checkbox label="线下主题活动" name="type"></el-checkbox>
+      <el-checkbox label="单纯品牌曝光" name="type"></el-checkbox>
+    </el-checkbox-group>
+    <el-input  v-model="editform.phone" ></el-input>
+  </el-form-item>
+  <el-form-item label="出生日期">
+
+    <el-input  v-model="editform.birthday" ></el-input>
+  </el-form-item>
+  <el-form-item label="个人说明">
+    <el-input  v-model="editform.signature" ></el-input>
+  </el-form-item>
+  <el-form-item label="住址">
+    <el-input  v-model="editform.address" ></el-input>
+  </el-form-item>
+  <el-form-item label="注册时间">
+    <el-input  v-model="editform.registrationtime" ></el-input>
+  </el-form-item>
+  <el-form-item>
+    <el-button type="primary" @click="onSubmit">立即创建</el-button>
+    <el-button>取消</el-button>
+  </el-form-item>
+ 
+		
+      
+      <div class="modal-footer">
+        <el-button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</el-button>
+        <el-button type="button" class="btn btn-primary" @click="save" data-dismiss="modal">保存</el-button>
+      </div>
+      	</el-form>
+      </div>
+    </div>
+  </div>
+</div>
+//Vertically centered Modal -->
+<!-- //gallery -->
+ <!-- subscribe -->
+	
+	<div class="footer-main">
+		<div class="footer-social">
+			<h4>关于平台</h4>
+			<ul>
+				<li>					
+				<span class="fab fa-facebook-f icon_facebook"></span><p style="color: white;">服务范围为广东省广州市地区</p>					
+				</li>
+				
+			</ul>
+		</div>
+		<div class="cpy-right">
+			<p>2020-3-5 《同城搬家供需信息交流平台》平台联系人：曾运棋  联系电话：12345678910</p>
+		</div>
+    </div>
+
+<!-- //footer -->
+<!-- js -->
+	<script type="text/javascript" src="/js/jquery-2.2.3.min.js"></script>
+	<script type="text/javascript" src="/js/bootstrap.js"></script> <!-- Necessary-JavaScript-File-For-Bootstrap -->
+	<!-- //js -->
+	<!-- simpleLightbox -->
+	<script src="/js/simpleLightbox.js"></script>
+	<script>
+		$('.w3_section_1_gallery_grid a').simpleLightbox();
+	</script>
+	<!-- //simpleLightbox -->
+<!-- start-smooth-scrolling -->
+	<script src="/js/move-top.js"></script>
+	<script src="/js/easing.js"></script>
+	<script>
+		jQuery(document).ready(function ($) {
+			$(".scroll").click(function (event) {
+				event.preventDefault();
+
+				$('html,body').animate({
+					scrollTop: $(this.hash).offset().top
+				}, 1000);
+			});
+		});
+	</script>
+	<!-- //end-smooth-scrolling -->
+	
+	<!-- smooth-scrolling-of-move-up -->
+	<script>
+		$(document).ready(function () {
+			$().UItoTop({
+				easingType: 'easeOutQuart'
+			});
+
+		});
+	</script>
+	<!-- //smooth-scrolling-of-move-up -->
+	
+	
+	<!-- smooth scrolling js -->
+	<script src="/js/SmoothScroll.min.js"></script>
+	<!-- //smooth scrolling js -->
+	<!--<script>-->
+	<!--new Vue({-->
+      <!--el: '#app',-->
+      <!--data: function(){-->
+        <!--return { -->
+        <!--form:{},-->
+
+        <!--};-->
+      <!--}, -->
+    <!--created() {-->
+      	<!--const that=this;-->
+      	<!--that.loan();-->
+      	<!--that.getform();-->
+      <!--},-->
+     <!--methods:{-->
+    <!---->
+    <!--loan() {-->
+<!--//  	const that=this;-->
+        <!--this.form={-->
+          <!--uname: '曾运棋',-->
+          <!--sex: '1',-->
+          <!--email: '123@qq.com',-->
+          <!--identity: '4565564',-->
+          <!--phone: '12345648',-->
+          <!--birthday: '2020-14-2',-->
+          <!--signature: '你哈 ',-->
+          <!--address: '广州',-->
+          <!--registrationtime: '2020-02-30'-->
+        <!--};-->
+      <!--},-->
+<!--}   -->
+ <!--})-->
+<!--</script>-->
+<!--<script>-->
+	<!--new Vue({-->
+      <!--el: '#ap',-->
+      <!--data: function(){-->
+        <!--return {-->
+        <!--editform:{},-->
+        <!--postform:{},-->
+        <!--};-->
+      <!--}, -->
+    <!--created() {-->
+      	<!--const that=this;      	-->
+      	<!--that.getform();-->
+
+      <!--},-->
+     <!--methods:{-->
+    <!---->
+      <!--getform() {-->
+<!--//  	const that=this;-->
+        <!--this.editform={-->
+          <!--uname: '曾运棋',-->
+          <!--sex: '1',-->
+          <!--email: '123@qq.com',-->
+          <!--identity: '4565564',-->
+          <!--phone: '12345648',-->
+          <!--birthday: '2020-14-2',-->
+          <!--signature: '你哈 ',-->
+          <!--address: '广州',-->
+          <!--registrationtime: '2020-02-30'-->
+        <!--};-->
+      <!--},-->
+
+
+    <!--}-->
+
+ <!--})-->
+<!--</script>-->
+<script>
+    var myname = $("#uname").val();
+    var uid = $("#uid").val();
+    new Vue({
+        el: '#order',
+        data: function () {
+            return {
+                liuyan:[],
+                myorders: [],
+                pinglun: [],
+                order: [],
+                table: false,
+                a: [{
+                    content: '',
+                    name: '',
+                    fid:'',
+                    useredname: '',  //被回复的人的名字
+                    username: '',   //回复人的名字
+                    type: '2'   //类型回复
+                }],
+                dialog: false,
+                loading: false,
+                // addpinglun: {
+                //     oid: '',
+                //     tname: '',
+                //     content: '',
+                //     scoring: '',
+                //     type: '1'
+                // },
+                // addhiufu: {
+                //     aid: '',
+                //     username: '',
+                //     useredname: '',
+                //     content: '',
+                //     type: '2'
+                // },
+                formLabelWidth: '80px',
+                timer: null,
+            };
+        },
+        created() {
+            const that = this;
+           // that.getpinglun();
+            that.getliuyan();
+        },
+        methods: {
+            // getpinglun() {
+            //     axios.get('/pinglun/selectall', {
+            //             params: {
+            //                 oid: orderid
+            //             }
+            //         }
+            //     ).then(req => {
+            //         this.pinglun = req.data.data;
+            //         req.data.data.forEach((v, index) => {
+            //             console.log("================================================================================")
+            //             console.log(v);
+            //             console.log(index);
+            //             let a = {
+            //                 content: '',
+            //                 name:'',
+            //                 useredname: '',  //被回复的人的名字
+            //                 username: '',   //回复人的名字
+            //                 type: '2'   //类型回复
+            //             };
+            //             this.a.push(a);
+            //               console.log(this.a);
+            //         });
+            //     })
+            // },
+
+            // addpinglun(add) {
+            //     this.dialog = true;
+            //     this.pinglun.oid = add.oid;
+            //     this.pinglun.tname = add.tname;
+            // },
+            // handleClose(done) {
+            //     if (this.loading) {
+            //         return;
+            //     }
+            //     this.$confirm('确定要发布评论吗？')
+            //         .then(_ => {
+            //             // this.loading = true;
+            //             this.timer = setTimeout(() => {
+            //                 axios.post('/pinglun/add', JSON.stringify(this.pinglun), {
+            //                         headers: {
+            //                             'Content-Type': 'application/json;charset=UTF-8'
+            //                         }
+            //                     }
+            //                 ).then(req => {
+            //                     // 动画关闭需要一定的时间
+            //                     setTimeout(() => {
+            //                         this.loading = false;
+            //                     }, 400);
+            //                     window.location.href = "/order"
+            //                 })
+            //
+            //             }, 2000);
+            //         })
+            //     ;
+            // },
+            // cancelForm() {
+            //     this.loading = false;
+            //     this.dialog = false;
+            //     clearTimeout(this.timer);
+            // },
+            // //取消订单
+            // delect(val) {
+            //     var a = {
+            //         oid: val.oid,
+            //         type: "3"
+            //     };
+            //     this.$confirm('是否删除订单?', '提示', {
+            //         confirmButtonText: '确定',
+            //         cancelButtonText: '取消',
+            //         type: 'warning'
+            //     }).then(() => {
+            //         axios.post('/order/edit', JSON.stringify(a), {
+            //                 headers: {
+            //                     'Content-Type': 'application/json;charset=UTF-8'
+            //                 }
+            //             }
+            //         ).then(req => {
+            //             this.$message({
+            //                 type: 'success',
+            //                 message: '删除成功!'
+            //
+            //             });
+            //             //window.location.href = "/order";
+            //             this.getmyorder();
+            //         })
+            //
+            //     }).catch(() => {
+            //         this.$message({
+            //             type: 'info',
+            //             message: '已取消删除'
+            //         })
+            //     })
+            //
+            //
+            // },
+            x(b, index) {
+                console.log(
+                    '===================================================================='
+                );// this.ah = a;
+                console.log(b);
+                this.a[index].name = b.username;
+                this.a[index].username = myname;
+                this.a[index].useredname = b.username;
+                // this.a[index].fid = this.pinglun[index].aid;
+                // this.a[index].comment =
+                //  this.dialogVisible = true;
+            },
+            y(b, index) {
+                console.log(
+                    '===================================================================='
+                );// this.ah = a;
+                console.log(b);
+                this.a[index].name = b.useredname;
+                this.a[index].username = myname;
+                this.a[index].useredname = b.useredname;
+                //this.a[index].fid = this.pinglun[index].aid;
+                // this.a[index].username =
+                //     aid:'',
+                //     username:'',
+                //     useredname:'',
+                // this.dialogVisible = true;
+            },
+            re(index) {
+                this.a[index].fid = this.pinglun[index].aid;
+                if(this.a[index].name==''){
+                    this.a[index].username=myname;
+                    this.a[index].useredname=this.pinglun[index].uname;
+                }
+                axios.post('/pinglun/add', JSON.stringify(this.a[index]), {
+                        headers: {
+                            'Content-Type': 'application/json;charset=UTF-8'
+                        }
+                    }
+                ).then(req => {
+                    this.getpinglun();
+                    this.a[index].content='';
+                })
+                console.log(this.a[index])
+
+            },
+            del(a){
+                var aid = a.aid;
+                axios.get('/pinglun/del', {
+                        params:{
+                            aid:aid
+                        }
+                    }
+                ).then(req => {
+                    this.$message({
+                        message: '删除成功！',
+                        type: 'success'
+                    });
+                    this.getpinglun();
+                    this.a[index].content='';
+                })
+            },
+            delhuifu(a,index){
+                var aid = a.aid;
+                axios.get('/huifupl/del', {
+                        params:{
+                            aid:aid
+                        }
+                    }
+                ).then(req => {
+                    this.$message({
+                        message: '删除成功！',
+                        type: 'success'
+                    });
+                    this.getpinglun();
+                    this.a[index].content='';
+                })
+            },
+            getliuyan(){
+                var x={
+                    uid:uid
+                }
+                const that=this;
+                axios.post('/mes/selectour',JSON.stringify(x),{
+                        headers: {
+                            'Content-Type': 'application/json;charset=UTF-8'
+                        }
+                    }
+                ).then(req =>{
+                    this.liuyan=req.data.data;
+                })
+            },
+            handleChange(val) {
+                console.log(val);
+            },
+
+        }
+    })
+</script>
+ </body>
+</html>

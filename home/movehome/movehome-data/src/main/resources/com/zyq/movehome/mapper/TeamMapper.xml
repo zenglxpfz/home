@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zyq.movehome.mapper.TeamMapper" >
+  <resultMap id="BaseResultMap" type="com.zyq.movehome.dto.TeamDTO" >
+    <id column="TID" property="tid" jdbcType="INTEGER" />
+    <result column="TNAME" property="tname" jdbcType="VARCHAR" />
+    <result column="SIOGANS" property="siogans" jdbcType="VARCHAR" />
+    <result column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="CREATETIME" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="TPERSON" property="tperson" jdbcType="BIGINT" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+    <result column="TPICTURE" property="tpicture" jdbcType="VARCHAR" />
+    <result column="THONOR" property="thonor" jdbcType="VARCHAR" />
+    <result column="TWATCH" property="twatch" jdbcType="BIGINT" />
+    <result column="TLIKES" property="tlikes" jdbcType="BIGINT" />
+    <result column="TADDRESS" property="taddress" jdbcType="VARCHAR" />
+    <result column="TRANGE" property="trange" jdbcType="VARCHAR" />
+    <result column="TDUIZ" property="tduiz" jdbcType="VARCHAR" />
+    <result column="TPHONE" property="tphone" jdbcType="VARCHAR" />
+    <result column="TEMAIL" property="temail" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="BaseResultMap2" type="com.zyq.movehome.dto.TeamandUserDTO" >
+    <id column="TID" property="tid" jdbcType="INTEGER" />
+    <result column="TNAME" property="tname" jdbcType="VARCHAR" />
+    <result column="SIOGANS" property="siogans" jdbcType="VARCHAR" />
+    <result column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="CREATETIME" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="TPERSON" property="tperson" jdbcType="BIGINT" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+    <result column="TPICTURE" property="tpicture" jdbcType="VARCHAR" />
+    <result column="THONOR" property="thonor" jdbcType="VARCHAR" />
+    <result column="TWATCH" property="twatch" jdbcType="BIGINT" />
+    <result column="TLIKES" property="tlikes" jdbcType="BIGINT" />
+    <result column="TADDRESS" property="taddress" jdbcType="VARCHAR" />
+    <result column="TRANGE" property="trange" jdbcType="VARCHAR" />
+    <result column="TDUIZ" property="tduiz" jdbcType="VARCHAR" />
+    <result column="TPHONE" property="tphone" jdbcType="VARCHAR" />
+    <result column="TEMAIL" property="temail" jdbcType="VARCHAR" />
+    <result
+  </resultMap>
+  <sql id="Base_Column_List" >
+    TID, TNAME, SIOGANS, CODE, CREATETIME, TPERSON, STATUS, TPICTURE, THONOR, TWATCH, 
+    TLIKES, TADDRESS, TRANGE,TDUIZ,TPHONE,TEMAIL
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from team
+    where TID = #{tid,jdbcType=INTEGER}
+  </select>
+  <select id="selectByCode" resultMap="BaseResultMap" parameterType="com.zyq.movehome.dto.TeamDTO" >
+    select
+    <include refid="Base_Column_List" />
+    from team
+    where CODE = #{code,jdbcType=VARCHAR}
+  </select>
+  <select id="selectbykey" resultMap="BaseResultMap" parameterType="com.zyq.movehome.dto.SouDTO" >
+    select
+    <include refid="Base_Column_List" />
+    from team
+
+    where TNAME like concat('%',#{tname},'%') or TADDRESS like concat('%',#{tname},'%') or TRANGE like concat('%',#{tname},'%')
+  </select>
+  <select id="selectTop" resultMap="BaseResultMap" parameterType="com.zyq.movehome.dto.TeamDTO" >
+    select
+    <include refid="Base_Column_List" />
+    from team
+    where TNAME in
+    <foreach collection="tnames" index="index" close=")" open="(" item="item" separator=",">
+     #{item,jdbcType=VARCHAR}
+    </foreach>
+
+    </select>
+
+  <select id="selectNew" resultMap="BaseResultMap" parameterType="com.zyq.movehome.dto.TeamDTO" >
+    select
+    <include refid="Base_Column_List" />
+    from team
+    order by
+    CREATETIME desc limit 0,3
+
+  </select>
+  <select id="selectTeam" resultMap="BaseResultMap" parameterType="com.zyq.movehome.dto.TeamDTO" >
+    select
+    <include refid="Base_Column_List" />
+    from team
+    where 1=1
+      <if test="tid != null" >
+       and TID = #{tid,jdbcType=INTEGER}
+      </if>
+      <if test="tname != null" >
+        and  TNAME= #{tname,jdbcType=VARCHAR}
+      </if>
+      <if test="siogans != null" >
+        and SIOGANS = #{siogans,jdbcType=VARCHAR}
+      </if>
+      <if test="code != null" >
+        and CODE = #{code,jdbcType=VARCHAR}
+      </if>
+      <if test="createtime != null" >
+        and CREATETIME = #{createtime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="tperson != null" >
+        and TPERSON = #{tperson,jdbcType=BIGINT}
+      </if>
+      <if test="status != null" >
+        and STATUS = #{status,jdbcType=VARCHAR}
+      </if>
+      <if test="tpicture != null" >
+        and TPICTURE = #{tpicture,jdbcType=VARCHAR}
+      </if>
+      <if test="thonor != null" >
+        and THONOR =#{thonor,jdbcType=VARCHAR}
+      </if>
+      <if test="twatch != null" >
+        and TWATCH = #{twatch,jdbcType=BIGINT}
+      </if>
+      <if test="tlikes != null" >
+        and TLIKES = #{tlikes,jdbcType=BIGINT}
+      </if>
+      <if test="taddress != null" >
+        and TADDRESS = #{taddress,jdbcType=VARCHAR}
+      </if>
+      <if test="trange != null" >
+        and TRANGE = #{trange,jdbcType=VARCHAR}
+      </if>
+      <if test="tduiz != null" >
+        and TDUIZ = #{tduiz,jdbcType=VARCHAR}
+      </if>
+      <if test="tphone != null" >
+       and TPHONE = #{tphone,jdbcType=VARCHAR}
+      </if>
+    <if test="temail != null" >
+      and TEMAIL = #{temail,jdbcType=VARCHAR}
+    </if>
+  </select>
+  <select id="selectteamAndUser" resultMap="BaseResultMap2" parameterType="com.zyq.movehome.dto.TeamDTO">
+select * from team LEFT JOIN `user` on team.TDUIZ = `user`.UNAME where team.tid =#{tid};
+  </select>
+
+    <select id="selectAll" resultMap="BaseResultMap" parameterType="com.zyq.movehome.dto.TeamDTO" >
+
+        select
+        <include refid="Base_Column_List" />
+        from team
+        where 1=1
+      <if test="tid != null" >
+       and TID = #{tid,jdbcType=INTEGER}
+      </if>
+      <if test="tname != null" >
+       AND TNAME like concat('%',#{tname,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="siogans != null" >
+       AND SIOGANS = #{siogans,jdbcType=VARCHAR}
+      </if>
+      <if test="code != null" >
+       AND CODE = #{code,jdbcType=VARCHAR}
+      </if>
+      <if test="createtime != null" >
+       AND CREATETIME = #{createtime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="tperson != null" >
+       AND TPERSON = #{tperson,jdbcType=BIGINT}
+      </if>
+      <if test="status != null" >
+       AND STATUS = #{status,jdbcType=VARCHAR}
+      </if>
+      <if test="tpicture != null" >
+       AND TPICTURE = #{tpicture,jdbcType=VARCHAR}
+      </if>
+      <if test="thonor != null" >
+       AND THONOR = #{thonor,jdbcType=VARCHAR}
+      </if>
+      <if test="twatch != null" >
+       AND TWATCH = #{twatch,jdbcType=BIGINT}
+      </if>
+      <if test="tlikes != null" >
+       AND TLIKES = #{tlikes,jdbcType=BIGINT}
+      </if>
+      <if test="taddress != null" >
+       AND TADDRESS = #{taddress,jdbcType=VARCHAR}
+      </if>
+      <if test="tduiz != null" >
+        AND TDUIZ = #{tduiz,jdbcType=VARCHAR}
+      </if>
+      <if test="tphone != null" >
+        AND TPHONE = #{tphone,jdbcType=VARCHAR}
+      </if>
+      <if test="trange != null" >
+       AND TRANGE = #{trange,jdbcType=VARCHAR}
+      </if>
+      <if test="temail != null" >
+        and TEMAIL = #{temail,jdbcType=VARCHAR}
+      </if>
+      <if test="tids != null and tids.size()>0" >
+        and tid in
+        <foreach collection="tids" item="item" index="index" close=")" open="(" separator=",">
+           #{item,jdbcType=INTEGER}
+        </foreach>
+
+      </if>
+    </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+
+
+    delete from team
+    where TID = #{tid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.zyq.movehome.dto.TeamNewDTO" >
+    insert into team (TID, TNAME, SIOGANS, 
+      CODE, CREATETIME, TPERSON, 
+      STATUS, TPICTURE, THONOR, 
+      TWATCH, TLIKES, TADDRESS, 
+      TRANGE,TDUIZ,TPHONE,TEMAIL)
+    values (#{tid,jdbcType=INTEGER}, #{tname,jdbcType=VARCHAR}, #{siogans,jdbcType=VARCHAR}, 
+      #{code,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, #{tperson,jdbcType=BIGINT}, 
+      #{status,jdbcType=VARCHAR}, #{tpicture,jdbcType=VARCHAR}, #{thonor,jdbcType=VARCHAR}, 
+      #{twatch,jdbcType=BIGINT}, #{tlikes,jdbcType=BIGINT}, #{taddress,jdbcType=VARCHAR}, 
+      #{trange,jdbcType=VARCHAR},#{tduiz,jdbcType=VARCHAR},#{tphone,jdbcType=VARCHAR},#{temail,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zyq.movehome.dto.TeamNewDTO" >
+    insert into team
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="tid != null" >
+        TID,
+      </if>
+      <if test="tname != null" >
+        TNAME,
+      </if>
+      <if test="siogans != null" >
+        SIOGANS,
+      </if>
+      <if test="code != null" >
+        CODE,
+      </if>
+      <if test="createtime != null" >
+        CREATETIME,
+      </if>
+      <if test="tperson != null" >
+        TPERSON,
+      </if>
+      <if test="status != null" >
+        STATUS,
+      </if>
+      <if test="tpicture != null" >
+        TPICTURE,
+      </if>
+      <if test="thonor != null" >
+        THONOR,
+      </if>
+      <if test="twatch != null" >
+        TWATCH,
+      </if>
+      <if test="tlikes != null" >
+        TLIKES,
+      </if>
+      <if test="taddress != null" >
+        TADDRESS,
+      </if>
+      <if test="trange != null" >
+        TRANGE,
+      </if>
+      <if test="tduiz != null" >
+        TDUIZ,
+      </if>
+      <if test="tphone != null" >
+        TPHONE,
+      </if>
+      <if test="temail != null" >
+        TEMAIL,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="tid != null" >
+        #{tid,jdbcType=INTEGER},
+      </if>
+      <if test="tname != null" >
+        #{tname,jdbcType=VARCHAR},
+      </if>
+      <if test="siogans != null" >
+        #{siogans,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tperson != null" >
+        #{tperson,jdbcType=BIGINT},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="tpicture != null" >
+        #{tpicture,jdbcType=VARCHAR},
+      </if>
+      <if test="thonor != null" >
+        #{thonor,jdbcType=VARCHAR},
+      </if>
+      <if test="twatch != null" >
+        #{twatch,jdbcType=BIGINT},
+      </if>
+      <if test="tlikes != null" >
+        #{tlikes,jdbcType=BIGINT},
+      </if>
+      <if test="taddress != null" >
+        #{taddress,jdbcType=VARCHAR},
+      </if>
+      <if test="trange != null" >
+        #{trange,jdbcType=VARCHAR},
+      </if>
+      <if test="tduiz != null" >
+        #{tduiz,jdbcType=VARCHAR},
+      </if>
+      <if test="tphone != null" >
+        #{tphone,jdbcType=VARCHAR},
+      </if>
+      <if test="temail != null" >
+        #{temail,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zyq.movehome.dto.TeamDTO" >
+    update team
+    <set >
+      <if test="tname != null" >
+        TNAME = #{tname,jdbcType=VARCHAR},
+      </if>
+      <if test="siogans != null" >
+        SIOGANS = #{siogans,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null" >
+        CODE = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        CREATETIME = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tperson != null" >
+        TPERSON = #{tperson,jdbcType=BIGINT},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="tpicture != null" >
+        TPICTURE = #{tpicture,jdbcType=VARCHAR},
+      </if>
+      <if test="thonor != null" >
+        THONOR = #{thonor,jdbcType=VARCHAR},
+      </if>
+      <if test="twatch != null" >
+        TWATCH = #{twatch,jdbcType=BIGINT},
+      </if>
+      <if test="tlikes != null" >
+        TLIKES = #{tlikes,jdbcType=BIGINT},
+      </if>
+      <if test="taddress != null" >
+        TADDRESS = #{taddress,jdbcType=VARCHAR},
+      </if>
+      <if test="trange != null" >
+        TRANGE = #{trange,jdbcType=VARCHAR},
+      </if>
+      <if test="tduiz != null" >
+        TDUIZ = #{tduiz,jdbcType=VARCHAR},
+      </if>
+      <if test="tphone != null" >
+        TPHONE = #{tphone,jdbcType=VARCHAR},
+      </if>
+      <if test="temail != null" >
+        TEMAIL = #{temail,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where TID = #{tid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zyq.movehome.dto.TeamDTO" >
+    update team
+    set TNAME = #{tname,jdbcType=VARCHAR},
+      SIOGANS = #{siogans,jdbcType=VARCHAR},
+      CODE = #{code,jdbcType=VARCHAR},
+      CREATETIME = #{createtime,jdbcType=TIMESTAMP},
+      TPERSON = #{tperson,jdbcType=BIGINT},
+      STATUS = #{status,jdbcType=VARCHAR},
+      TPICTURE = #{tpicture,jdbcType=VARCHAR},
+      THONOR = #{thonor,jdbcType=VARCHAR},
+      TWATCH = #{twatch,jdbcType=BIGINT},
+      TLIKES = #{tlikes,jdbcType=BIGINT},
+      TADDRESS = #{taddress,jdbcType=VARCHAR},
+      TRANGE = #{trange,jdbcType=VARCHAR},
+       TDUIZ = #{tduiz,jdbcType=VARCHAR},
+        TPHONE = #{tphone,jdbcType=VARCHAR},
+        TEMAIL = #{temail,jdbcType=VARCHAR}
+    where TID = #{tid,jdbcType=INTEGER}
+  </update>
+</mapper>

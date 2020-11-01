@@ -12,7 +12,6 @@ import java.util.Map;
  * @author: ZengYunQi
  * @time: 2020/1/15 - 10:20
  */
-@Data
 public class MsgResult<T> implements Serializable {
 
     private String message;
@@ -22,17 +21,65 @@ public class MsgResult<T> implements Serializable {
     //报存数据信息
     private T data;
 
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public Boolean getSuccess() {
+        return success;
+    }
+
+    public void setSuccess(Boolean success) {
+        this.success = success;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public Map<String, Object> getResult() {
+        return result;
+    }
+
+    public void setResult(Map<String, Object> result) {
+        this.result = result;
+    }
+
+    public T getData() {
+        return data;
+    }
+
+    public void setData(T data) {
+        this.data = data;
+    }
+
     //如果MsgResult中的T是什么类型，然后 参数就传什么类型的数据到success里面，返回时可以这样写MsgResult<Blooen>.success(true）;
     //MsgResult<List<Test>>.success(TestList）
     public static <T> MsgResult<T> success(T data){
         MsgResult<T> result = new MsgResult();
-        result.setCode("200");
+        result.setCode("code");
         result.setSuccess(true);
         result.setData(data);
         return result;
 
     }
 
+    public static <T> MsgResult<T> success(String code,T data){
+        MsgResult<T> result = new MsgResult();
+        result.setCode(code);
+        result.setSuccess(true);
+        result.setData(data);
+        return result;
+
+    }
     //返回失败时带数据
     public static <T> MsgResult<T> fail(String code,String message,T data){
         MsgResult<T> result = new MsgResult();

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>Services</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta charset="utf-8">
+	<meta name="keywords" content="" />
+	
+
+	<script type="application/x-javascript">
+		addEventListener("load", function () {
+			setTimeout(hideURLbar, 0);
+		}, false);
+
+		function hideURLbar() {
+			window.scrollTo(0, 1);
+		}
+	</script>
+	<link rel="stylesheet" href="css/bootstrap.css"> <!-- Bootstrap-Core-CSS -->
+	<link href="css/style.css" rel='stylesheet' type='text/css' />
+	<link href="css/owl.carousel.css" rel="stylesheet"><!-- Owl-carousel-CSS -->
+	<link href="css/fontawesome-all.css" rel="stylesheet">
+<link href="http://fonts.googleapis.com/css?family=Exo+2" rel="stylesheet">
+	<link href="http://fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+ <!--	描述：elm -->
+  <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="https://cdn.staticfile.org/axios/0.18.0/axios.min.js"></script>
+    <script src="base/plugins/jquery/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="base/dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="base/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <link rel="stylesheet" href="css/common.css">
+    <!--elm  -->
+</head>
+
+<body>
+<header>
+	<div class="header">
+		<nav class="navbar navbar-expand-lg navbar-light bg-light">
+		  <a class="navbar-brand" href="index.html">同城搬家供需信息交流平台</a>
+		  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		  </button>
+		  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<ul class="navbar-nav ml-auto">
+			  <li class="nav-item ">
+				<a class="nav-link" href="index.html">首页<span class="sr-only">(current)</span></a>
+			  </li>
+			  <li class="nav-item">
+				<a class="nav-link" href="about.html">我的订单</a>
+			  </li>
+			   <li class="nav-item  active">
+				<a class="nav-link" href="services.html">寻找搬家团队</a>
+			  </li>
+			   <li class="nav-item">
+				<a class="nav-link" href="properties.html">我的留言</a>
+			  </li>
+			  
+			  <li class="nav-item">
+				<a class="nav-link disabled" href="contact.html">历史记录</a>
+				
+			  </li>
+			  <li class="nav-item dropdown">
+				<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				 曾运棋
+				</a>
+				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+				  <a class="dropdown-item" href="typography.html">注销</a>
+				   <a href="#" class="dropdown-item" data-toggle="modal" data-target="#persionmessage" role="button">查看个人信息</a>
+				 <a href="#" class="dropdown-item" data-toggle="modal" data-target="#editmessage" role="button">编辑个人信息</a>
+				
+				</div>
+			  </li>
+			</ul>
+			<form class="form-inline my-2 my-lg-0">
+			  <input class="form-control mr-sm-2" type="search" placeholder="请输入信息查询团队" aria-label="Search">
+			  <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+			</form>
+		  </div>
+		</nav>
+		</div>
+</header>
+
+<div>
+    <h2><a href="/loginup">去登录...</a></h2>
+</div>
+<!-- //Vertically centered Modal -->
+<!-- //Vertically centered Modal -->
+
+<!-- js -->
+	<script type="text/javascript" src="js/jquery-2.2.3.min.js"></script>
+	<script type="text/javascript" src="js/bootstrap.js"></script> <!-- Necessary-JavaScript-File-For-Bootstrap --> 
+	<!-- //js -->
+	<!-- requried-jsfiles-for owl -->	<!-- testimonials -->
+	<script src="js/owl.carousel.js"></script>
+	<script>
+		$(document).ready(function () {
+			$("#owl-demo2").owlCarousel({
+				items: 1,
+				lazyLoad: false,
+				autoPlay: true,
+				navigation: false,
+				navigationText: false,
+				pagination: true,
+			});
+		});
+	</script>
+<!-- //requried-jsfiles-for owl -->	<!-- //testimonials -->
+<!-- start-smooth-scrolling -->
+	<script src="js/move-top.js"></script>
+	<script src="js/easing.js"></script>
+	<script>
+		jQuery(document).ready(function ($) {
+			$(".scroll").click(function (event) {
+				event.preventDefault();
+
+				$('html,body').animate({
+					scrollTop: $(this.hash).offset().top
+				}, 1000);
+			});
+		});
+	</script>
+	<!-- //end-smooth-scrolling -->
+	
+	<!-- smooth-scrolling-of-move-up -->
+	<script>
+		$(document).ready(function () {
+			/*
+			var defaults = {
+				containerID: 'toTop', // fading element id
+				containerHoverID: 'toTopHover', // fading element hover id
+				scrollSpeed: 1200,
+				easingType: 'linear' 
+			};
+			*/
+
+			$().UItoTop({
+				easingType: 'easeOutQuart'
+			});
+
+		});
+	</script>
+	<!-- //smooth-scrolling-of-move-up -->
+	<!--<script type="text/javascript" src="js/jquery-3.4.1/jquery-3.4.1.min.js" ></script>
+	<link href="bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet"/>
+	<script type="text/javascript" src="js/docs.min.js" ></script>
+	<script type="text/javascript" src="bootstrap-3.3.7-dist/js/bootstrap.min.js" ></script>
+	-->
+	
+	<!-- smooth scrolling js -->
+	<script src="js/SmoothScroll.min.js"></script>
+	<!-- //smooth scrolling js -->
+
+  
+
+ </body>
+</html>

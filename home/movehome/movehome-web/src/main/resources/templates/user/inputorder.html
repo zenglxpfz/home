@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Typography</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <meta name="keywords" content=""/>
+
+    <script type="application/x-javascript">
+        addEventListener("load", function () {
+            setTimeout(hideURLbar, 0);
+        }, false);
+
+        function hideURLbar() {
+            window.scrollTo(0, 1);
+        }
+    </script>
+    <link rel="stylesheet" href="css/bootstrap.css"> <!-- Bootstrap-Core-CSS -->
+    <link href="css/style.css" rel='stylesheet' type='text/css'/>
+    <link href="css/fontawesome-all.css" rel="stylesheet">
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i"
+          rel="stylesheet">
+    <link href="http://fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i"
+          rel="stylesheet">
+    <!--	描述：elm -->
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="https://cdn.staticfile.org/axios/0.18.0/axios.min.js"></script>
+    <script src="base/plugins/jquery/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="base/dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="base/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <link rel="stylesheet" href="css/common.css">
+    <!--elm  -->
+</head>
+
+<body>
+<header>
+    <div class="header">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="index.html">同城搬家供需信息交流平台</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item ">
+                        <a class="nav-link" href="/main">首页<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item  active">
+                        <a class="nav-link" href="/order">我的订单</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/moveteam">寻找搬家团队</a>
+                    </li>
+                    <li class="nav-item" active>
+                        <a class="nav-link" href="/myliuyan">我的留言</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link " href="/notice">告示</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span th:if=" ${session.user} ne null" th:text="${session.user.uname}"></span>
+                            <span th:if="${session.user} eq null " th:text="请登录"></span>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" th:if="${session.user} ne null" href="/loginup">
+                                <span th:if="${session.user} ne null " th:text="注销"></span>
+                            </a>
+                            <a class="dropdown-item" th:if="${session.user} eq null " href="/">
+                                <span th:if="${session.user} eq null " th:text="登录"></span>
+                            </a>
+                            <a href="#" class="dropdown-item" data-toggle="modal" data-target="#persionmessage"
+                               role="button">查看个人信息</a>
+                            <a href="#" class="dropdown-item" data-toggle="modal" data-target="#editmessage"
+                               role="button">编辑个人信息</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+</header>
+
+
+<!-- Typography-->
+<section class="inner-pages py-5">
+    <div class="container py-xl-5 py-sm-3">
+        <div class="w3-head-all text-center mb-3">
+            <h5>填写订单</h5>
+        </div>
+        <!-- forms -->
+        <div class="typo-section py-4 border-top border-bottom">
+            <input type="hidden"  id="tname" th:value="${session.team.tname}">
+            <input type="hidden"  id="uname" th:value="${session.user.uname}">
+            <div id="inputorder">
+                <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+                    <el-form-item label="订单标题" prop="mtitle">
+                        <el-input v-model="ruleForm.mtitle" ></el-input>
+                    </el-form-item>
+                    <el-form-item label="团队名称" prop="tname">
+                        <el-input  v-model="ruleForm.tname" :readonly="true"></el-input>
+                    </el-form-item>
+                    <el-form-item label="用户名称" prop="uname">
+                        <el-input  v-model="ruleForm.uname" :readonly="true"></el-input>
+                    </el-form-item>
+                    <el-form-item label="搬家起点" prop="mbegin">
+                        <el-input v-model="ruleForm.mbegin"></el-input>
+                    </el-form-item>
+                    <el-form-item label="搬家终点" prop="mend" >
+                        <el-input v-model="ruleForm.mend"></el-input>
+                    </el-form-item>
+                    <el-form-item label="搬家时间" prop="mtime">
+                        <el-date-picker
+                                v-model="ruleForm.mtime"
+                                placeholder="选择搬家时间"
+                                type="date"
+                                format="yyyy年MM月dd日"
+                                value-format="yyyy-MM-dd">
+                        >
+                        </el-date-picker>
+                    </el-form-item>
+                    <el-form-item label="搬家注意事项" prop="mattention">
+                        <el-input type="text"  v-model="ruleForm.mattention" style="width: 100%;"></el-input>
+                        <!--<el-input type="date" v-model="ruleForm.birthday"></el-input>-->
+                    </el-form-item>
+                    <el-form-item label="订单金额/元" prop="amount">
+                        <el-input v-model="ruleForm.amount"></el-input>
+                    </el-form-item>
+                    <el-form-item label="支付方式"  >
+
+                        <select v-model="ruleForm.payfor" name="payfor" style="font-size: 33px;">
+                            <option id="1" th:value="支付宝付">支付宝付</option>
+                            <option id="2" th:value="微信支付">微信支付</option>
+                            <option id="3" th:value="现金支付">现金支付</option>
+                        </select>
+                        <!--<el-input v-model="ruleForm.signature"></el-input>-->
+                    </el-form-item>
+
+                    <el-form-item>
+                        <el-button type="primary" @click="submitForm('ruleForm')">立即下单</el-button>
+                        <el-button @click="resetForm('ruleForm')">重置</el-button>
+                    </el-form-item>
+                </el-form>
+            </div>
+            <!--<form style="width: 50%;">-->
+                <!--<div class="form-group">-->
+                    <!--<label for="mtitle" style="font-size: 33px;">订单标题:</label>-->
+                    <!--<input type="text" class="form-control" name="mtitle" style="height: 60px;" id="mtitle">-->
+                <!--</div>-->
+                <!--<div class="form-group">-->
+                    <!--<label for="tname" style="font-size: 33px; ">团队名称:</label>-->
+                    <!--<input type="text" readonly="readonly" style="height: 60px;" class="form-control " name="tname"-->
+                           <!--id="tname" th:value="${session.team.tname}">-->
+                <!--</div>-->
+                <!--<div class="form-group">-->
+                    <!--<label for="uname" style="font-size: 33px;">用户名称:</label>-->
+                    <!--<input type="text" readonly="readonly" style="height: 60px;" class="form-control" name="uname"-->
+                           <!--id="uname" placeholder="" th:value="${session.user.uname}">-->
+                <!--</div>-->
+                <!--<div class="form-group">-->
+                    <!--<label for="mbegin" style="font-size: 33px;">搬家起点:</label>-->
+                    <!--<input type="text" style="height: 60px;" class="form-control" name="mbegin" id="mbegin"-->
+                           <!--placeholder="">-->
+                <!--</div>-->
+                <!--<div class="form-group">-->
+                    <!--<label for="mend" style="font-size: 33px;">搬家终点:</label>-->
+                    <!--<input type="text" style="height: 60px;" class="form-control" name="mend" id="mend" placeholder="">-->
+                <!--</div>-->
+                <!--<div class="form-group">-->
+                    <!--<label for="mtime" style="font-size: 33px;">开始搬家时间:</label>-->
+                    <!--<input type="date" style="height: 60px;" class="form-control" name="mtime" id="mtime"-->
+                           <!--placeholder="">-->
+                <!--</div>-->
+                <!--<div class="form-group">-->
+                    <!--<label for="mattention" style="font-size: 33px;">搬家注意事项:</label>-->
+                    <!--<input type="text" style="height: 60px;" class="form-control" name="mattention" id="mattention"-->
+                           <!--placeholder="">-->
+                <!--</div>-->
+                <!--<div class="form-group">-->
+                    <!--<label for="amout" style="font-size: 33px;">订单金额:</label>-->
+                    <!--<input type="text" style="height: 60px;" class="form-control" name="amout" id="amout"-->
+                           <!--placeholder="">-->
+                <!--</div>-->
+                <!--<div class="form-group">-->
+                    <!--<label for="payfor" style="font-size: 33px;">支付方式:</label>-->
+                    <!--<select name="payfor" id="payfor" style="font-size: 33px;">-->
+                        <!--<option th:value="支付宝付">支付宝付</option>-->
+                        <!--<option th:value="微信支付">微信支付</option>-->
+                        <!--<option th:value="现金支付">现金支付</option>-->
+                    <!--</select>-->
+                <!--</div>-->
+            <!--</form>-->
+            <!--<button style="font-size: 33px;" id="btn" class="btn btn-default">提交</button>-->
+            <!--<button type="reset" class="btn btn-default" style="font-size: 33px;">重新填写</button>-->
+
+
+        </div>
+        <!--// forms -->
+
+
+    </div>
+</section>
+<!-- subscribe -->
+<div class="footer-main">
+    <div class="footer-social">
+        <h4>关于平台</h4>
+        <ul>
+            <li>
+                <span class="fab fa-facebook-f icon_facebook"></span>
+                <p style="color: white;">服务范围为广东省广州市地区</p>
+            </li>
+        </ul>
+    </div>
+    <div class="cpy-right">
+        <p>2020-3-5 《同城搬家供需信息交流平台》平台联系人：曾运棋 联系电话：12345678910</p>
+    </div>
+</div>
+<!-- //footer -->
+<!-- bootstrap-modal-pop-up -->
+
+<!--
+	作者：offline
+	时间：2020-03-08
+	描述：个人信息模态框 data-toggle="modal" data-target="#persionmessage"
+-->
+<div class="modal fade" id="persionmessage" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-uppercase" id="exampleModalLongTitle">我的信息</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div id="app" class="modal-body">
+                <el-form ref="form" :model="form"  label-width="80px">
+
+                    <el-form-item label="姓名">
+                        <el-input v-model="form.uname" :readonly="true"></el-input>
+                    </el-form-item>
+                    <el-form-item label="性别">
+                        <el-radio-group v-model="form.sex" :readonly="true">
+                            <el-radio label="1" :readonly="true">男</el-radio>
+                            <el-radio label="2" :readonly="true">女</el-radio>
+                        </el-radio-group>
+                    </el-form-item>
+                    <el-form-item label="身份证号">
+                        <el-input v-model="form.identity" :readonly="true"></el-input>
+                    </el-form-item>
+                    <el-form-item label="邮箱">
+                        <el-input v-model="form.email" :readonly="true"></el-input>
+                    </el-form-item>
+                    <el-form-item label="手机号码">
+
+                        <el-input v-model="form.phone" :readonly="true"></el-input>
+                    </el-form-item>
+                    <el-form-item label="出生日期">
+                        <el-input v-model="form.birthday" :readonly="true"></el-input>
+                    </el-form-item>
+                    <el-form-item label="个人说明">
+                        <el-input v-model="form.signature" :readonly="true"></el-input>
+                    </el-form-item>
+                    <el-form-item label="住址">
+                        <el-input v-model="form.address" :readonly="true"></el-input>
+                    </el-form-item>
+                    <el-form-item label="注册时间">
+                        <el-input v-model="form.registrationtime" :readonly="true"></el-input>
+                    </el-form-item>
+
+                </el-form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--修改-->
+<div class="modal fade" id="editmessage" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-uppercase" id="exampleModalLongTitle">编辑我的信息</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div id="ap" class="modal-body">
+                <el-form ref="form" :model="editform" label-width="80px">
+                    <el-form-item label="姓名">
+                        <el-input v-model="editform.uname"></el-input>
+                    </el-form-item>
+                    <el-form-item label="性别">
+                        <el-radio-group v-model="editform.sex">
+                            <el-radio label="1">男</el-radio>
+                            <el-radio label="2">女</el-radio>
+                        </el-radio-group>
+                    </el-form-item>
+                    <el-form-item label="身份证号">
+                        <el-input v-model="editform.identity"></el-input>
+                    </el-form-item>
+                    <el-form-item label="邮箱">
+                        <el-input v-model="editform.email"></el-input>
+                    </el-form-item>
+                    <el-form-item label="手机号码">
+                        <el-input v-model="editform.phone"></el-input>
+                    </el-form-item>
+                    <el-form-item label="出生日期">
+                        <el-input v-model="editform.birthday"></el-input>
+                    </el-form-item>
+                    <el-form-item label="个人说明">
+                        <el-input v-model="editform.signature"></el-input>
+                    </el-form-item>
+                    <el-form-item label="住址">
+                        <el-input v-model="editform.address"></el-input>
+                    </el-form-item>
+                    <el-form-item label="注册时间">
+                        <el-input v-model="editform.registrationtime"></el-input>
+                    </el-form-item>
+                    <div class="modal-footer">
+                        <el-button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</el-button>
+                        <el-button type="button" class="btn btn-primary" data-dismiss="modal">保存</el-button>
+                    </div>
+                </el-form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- //bootstrap-modal-pop-up -->
+
+<!-- js -->
+<script type="text/javascript" src="js/jquery-2.2.3.min.js"></script>
+<script type="text/javascript" src="js/bootstrap.js"></script>
+<!-- //js -->
+<!-- start-smooth-scrolling -->
+<script src="js/move-top.js"></script>
+<script src="js/easing.js"></script>
+<script>
+    jQuery(document).ready(function ($) {
+        $(".scroll").click(function (event) {
+            event.preventDefault();
+
+            $('html,body').animate({
+                scrollTop: $(this.hash).offset().top
+            }, 1000);
+        });
+    });
+</script>
+<!-- //下单信息 -->
+<script>
+    $("document").ready(function () {
+
+        $("#btn").click(function () {
+            var mtitle = $("#mtitle").val();
+            var tname = $("#tname").val();
+
+            var uname = $("#uname").val();
+
+            var mbegin = $("#mbegin").val();
+            var mend = $("#mend").val();
+            var mtime = $("#mtime").val();
+            var mattention = $("#mattention").val();
+
+             var amount = parseInt($("#amout").val());
+
+            // $("#payfor").val();
+            var payfor = $("#payfor option:selected").val();
+
+            var s = {
+                "mtitle": mtitle,
+                "tname": tname,
+                "uname": uname,
+                "mbegin": mbegin,
+                "mend": mend,
+                "mtime": mtime,
+                "mattention": mattention,
+                "amount": amount,
+                "payfor": payfor
+            }
+            var str = JSON.stringify(s);
+            $.ajax({
+                url: "/order/add",
+                type: 'POST',
+                dataType: 'json',
+                contentType: 'application/json',
+                data: str,
+                success: function (result) {
+                    console.log(result.success);
+                    if (result.success === false) {
+                        alert(result.message);
+                        window.location.href = '/user/form';
+                        return false;
+
+                    }
+                    alert("下单成功！")
+                    window.location.href = '/order';
+                }
+            });
+        })
+    });
+</script>
+<!-- smooth-scrolling-of-move-up -->
+<script>
+    //		$(document).ready(function () {
+    //			/*
+    //			var defaults = {
+    //				containerID: 'toTop', // fading element id
+    //				containerHoverID: 'toTopHover', // fading element hover id
+    //				scrollSpeed: 1200,
+    //				easingType: 'linear'
+    //			};
+    //			*/
+    //
+    //			$().UItoTop({
+    //				easingType: 'easeOutQuart'
+    //			});
+    //
+    //		});
+</script>
+<!-- //smooth-scrolling-of-move-up -->
+
+
+<!-- smooth scrolling js -->
+<script src="js/SmoothScroll.min.js"></script>
+<!-- //smooth scrolling js -->
+<script>
+    new Vue({
+        el: '#app',
+        data: function () {
+            return {
+                form: {},
+                a:'',
+
+            };
+        },
+        created() {
+            const that = this;
+            that.loan();
+        },
+        methods: {
+
+            loan() {
+//  	const that=this;
+                this.form = {
+                    uname: '曾运棋',
+                    sex: '1',
+                    email: '123@qq.com',
+                    identity: '4565564',
+                    phone: '12345648',
+                    birthday: '2020-14-2',
+                    signature: '你哈 ',
+                    address: '广州',
+                    registrationtime: '2020-02-30'
+                };
+            },
+        }
+    })
+</script>
+<script>
+    // $("document").ready(function () {
+    //
+    //     var tid = ${session.user}
+    //     if(tid==null){
+    //         $.ajax({
+    //             url:"/error"
+    //         })
+    //     }
+    //
+    // });
+
+    new Vue({
+        el: '#ap',
+        data: function () {
+            return {
+
+                editform: {},
+                postform: {},
+            };
+        },
+        created() {
+            const that = this;
+            that.getform();
+        },
+        methods: {
+
+            getform() {
+//  	const that=this;
+                this.editform = {
+                    uname: '曾运棋',
+                    sex: '1',
+                    email: '123@qq.com',
+                    identity: '4565564',
+                    phone: '12345648',
+                    birthday: '2020-14-2',
+                    signature: '你哈 ',
+                    address: '广州',
+                    registrationtime: '2020-02-30'
+                };
+            },
+        }
+//  methods: {
+//    onSubmit() {
+//      console.log('submit!');
+//    }
+//  }
+    })
+</script>
+<script>
+    var tname = $("#tname").val();
+    var uname = $("#uname").val();
+    new Vue({
+        el:'#inputorder',
+        data: function () {
+            return {
+                count:'',
+                ruleForm: {
+                    mtitle: '',
+                    tname: tname,
+                    mbegin: '',
+                    mend: '',
+                    mtime: '',
+                    mattention: '',
+                    amount: '',
+                    payfor: '',
+                    uname: uname,
+                    email: '',
+                    phone: ''
+                },
+                rules: {
+                    mtitle: [
+                        { required: true, message: '请输入用户名', trigger: 'blur' },
+                        {
+                            pattern: /^[\u4E00-\u9FA5]+$/,  //正则
+                            message: '订单标题只能为中文'
+                        }
+//                      { min: 2, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+//                      {pattern: ^[\\u4e00-\\u9fa5]{2,5}+$ , message: '用户名为2-5个中文',trigger: 'blur'}
+                    ],
+                    mbegin: [
+                        { required: true, message: '请输入搬家起点', trigger: 'blur' },
+                    ],
+                    mend: [
+                        {  required: true, message: '请输入搬家起点', trigger: 'blur' },
+                    ],
+                    mtime: [
+                        {  required: true, message: '请输入开始搬家时间', trigger: 'blur' },
+
+                    ],
+                    amout: [
+                        {  required: true, message: '请输入付费金额', trigger: 'blur' }
+                    ],
+                    payfor: [
+                        { required: true, message: '请选择支付方式', trigger: 'blur' }
+                    ],
+                }
+            };
+
+        },
+        create(){
+
+        },
+        methods: {
+            submitForm(formName) {
+
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        axios.post('/order/add', JSON.stringify(this.ruleForm), {
+                                headers: {
+                                    'Content-Type': 'application/json;charset=UTF-8'
+                                }
+                            }
+                        ).then(req => {
+                            if(req.data.succsee==false){
+                                this.$message.error(req.data.message);
+                                return false;
+                            }
+                            else{
+                                this.$message({
+                                    message: '下单成功！',
+                                    type: 'success'
+                                });
+                                this.goGrdoupRecor()
+
+                            }
+                        })
+
+
+                    } else {
+                        this.$message({
+                            message: '请填写订单内容',
+                            type: 'error'
+                        });
+                        return false;
+                    }
+                });
+            },
+            goGrdoupRecor(){
+                const TIME_COUNT = 1;
+                if(!this.timer){
+                    this.count = TIME_COUNT;
+                    this.show = false;
+                    this.timer = setInterval(()=>{
+                        if(this.count > 0 && this.count <= TIME_COUNT){
+                            this.count--;
+                        }else{
+                            this.show = true;
+                            clearInterval(this.timer);
+                            this.timer = null;
+                            //跳转的页面写在此处
+                            window.location.href="/order";
+                            this.ruleForm= {
+                                uname: '',
+                                sex: '',
+                                password: '',
+                                email: '',
+                                phone: '',
+                                birthday: '',
+                                address: '',
+                                identity: '',
+                                signature: ''
+                            }
+                        }
+                    },1000)
+                }
+            },
+            resetForm(formName) {
+
+                this.$refs[formName].resetFields();
+            },
+
+
+
+        },
+    })
+</script>
+<style>
+    .el-form-item{
+        height:60px;
+    }
+    .el-form-item.input{
+        width: 80px;
+    }
+</style>
+</body>
+
+</html>

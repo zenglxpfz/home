@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Home</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <meta name="keywords" content=""/>
+
+    <link rel="stylesheet" href="/css/bootstrap.css"> <!-- Bootstrap-Core-CSS -->
+    <link href="/css/style.css" rel='stylesheet' type='text/css'/>
+    <link href="/css/owl.carousel.css" rel="stylesheet"><!-- Owl-carousel-CSS -->
+    <link href="/css/fontawesome-all.css" rel="stylesheet">
+    <link href="http://fonts.googleapis.com/css?family=Exo+2" rel="stylesheet">
+    <link href="http://fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i"
+          rel="stylesheet">
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="https://cdn.staticfile.org/axios/0.18.0/axios.min.js"></script>
+    <script src="base/plugins/jquery/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="base/dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="base/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+</head>
+
+<body>
+<!--
+    作者：offline
+    时间：2020-03-04
+    描述：头部内容
+-->
+<header>
+    <div class="header">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="index.html">同城搬家供需信息交流平台</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/userservice/main">首页<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/u/order">我的团队订单</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/myteammessage">我的团队信息</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/u/contact">我的团队消息</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link " href="/u/myliuyan">我的消息</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link " href="/forteam/notice">告示</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <input type="hidden" id="userid" th:if=" ${session.userservice} ne null"
+                               th:value="${session.userservice.uid}"/>
+                        <input type="hidden" id="uname" th:if=" ${session.userservice} ne null"
+                               th:value="${session.userservice.uname}"/>
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span th:if=" ${session.userservice} ne null" th:text="${session.userservice.uname}"></span>
+                            <span th:if="${session.userservice} eq null " th:text="请登录"></span>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" th:if="${session.userservice} ne null" href="/loginup">
+                                <span th:if="${session.userservice} ne null " th:text="注销"></span>
+                            </a>
+                            <a class="dropdown-item" th:if="${session.userservice} eq null " href="/">
+                                <span th:if="${session.userservice} eq null " th:text="登录"></span>
+                            </a>
+                            <a href="#" class="dropdown-item" data-toggle="modal" data-target="#persionmessage"
+                               role="button">查看个人信息</a>
+                            <a href="#" class="dropdown-item" data-toggle="modal" data-target="#editmessage"
+                               role="button">编辑个人信息</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+</header>
+<!--/banner-->
+<section class="banner-top">
+    <!--//banner position-->
+    <!--</div>-->
+</section>
+
+<div class="row" th:if="${session.userservice.code} eq '0'">
+    <div class="col-md-8">
+        <h4>你有团队了吗？？</h4>
+        <a href="/create">点我创建团队</a>
+        <h5>也可以在下面寻找团队加入哦！</h5>
+    </div>
+</div>
+
+<br/>
+<div id="team">
+    <div class="container">
+
+        <div class="w3-head-all text-center mb-5">
+            <h3>所有团队列表</h3>
+        </div>
+        <div class="col-md-3">
+            <el-form ref="form" :model="sou" class="form-inline my-2 my-lg-0">
+                <el-form-item label="">
+                    <el-input v-model="sou.tname" placeholder="请输入信息查询团队" aria-label="Search"></el-input>
+                </el-form-item>
+            </el-form>
+            <el-button @click="sousuo" class="btn btn-outline-success my-2 my-sm-0">Search</el-button>
+        </div>
+        <template>
+            <el-table class="tableBox"
+                      :data="teamdate"
+                      style="width: 100%"
+                      :row-style="{height: '200px'}"
+            >
+                <el-table-column
+                        width="300"
+                >
+<!--                    <template slot-scope="scope">-->
+<!--                        <img  :src="scope.row.tpicture" class="img-responsive img-fluid" alt=""/>-->
+<!--                    </template>　-->
+                    <img  src="/images/g4.jpg" class="img-responsive img-fluid" alt=""/>
+                </el-table-column>
+                <el-table-column
+                        prop="name"
+                        width="300">
+                    <template slot-scope="scope">
+                        <h5 style="color: red;"><a href="javascript:void(0);"  @click="x(scope.row)">{{scope.row.tname}}</a></h5>
+
+                        <span>{{scope.row.siogans}}</span>
+
+                    </template>　
+                </el-table-column>
+                <el-table-column
+                        width="300"
+                >
+                    <template slot-scope="scope">
+                        <h5>工作地址：</h5>
+                        <span style="color: red;font-size: 30px">{{scope.row.taddress}}</span>
+                        <div class="nodataTip">
+                           <span>目前人数：{{scope.row.tperson}}</span><br />
+                            <span>联系电话：{{scope.row.tphone}}</span>
+                        </div>
+                    </template>　
+                </el-table-column>
+
+                <el-table-column
+                        prop="address"
+                        label="">
+                    <template slot-scope="scope">
+                    <a  href="javascript:void(0);" @click="apply(scope.row)">申请加入团队</a>
+                    </template>
+                </el-table-column>
+
+            </el-table>
+        </template>
+        <!-- 描述：分页操作-->
+        <div class="pagination" style="padding: 20px;text-align: center;">
+            <el-pagination background
+                           @current-change="handleCurrentChange"
+                           layout="prev, pager, next,total"
+                           :current-page="startPage" :prev-text="prev" :next-text="next"
+                           :total="total"
+                           :page-size="4"
+            />
+        </div>
+        <!--分页-->
+    </div>
+</div>
+<!--</div>-->
+<!-- //subscribe -->
+<div class="footer-main">
+    <div class="footer-social">
+        <h4>关于平台</h4>
+        <ul>
+            <li>
+                <span class="fab fa-facebook-f icon_facebook"></span>
+                <p style="color: white;">服务范围为广东省广州市地区</p>
+            </li>
+
+        </ul>
+    </div>
+    <div class="cpy-right">
+        <p>2020-3-5 《同城搬家供需信息交流平台》平台联系人：曾运棋 联系电话：12345678910</p>
+    </div>
+</div>
+
+<!--
+	作者：offline
+	时间：2020-03-08
+	描述：个人信息模态框 data-toggle="modal" data-target="#persionmessage"
+-->
+<div id="mymessage">
+    <div class="modal fade" id="persionmessage" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-uppercase" id="persionmessag">我的信息</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <el-form ref="form"
+                             :model="form" label-width="80px">
+
+                        <el-form-item label="姓名">
+                            <span>{{form.uname}}</span>
+                        </el-form-item>
+                        <el-form-item label="性别">
+                            <span>{{form.sex}}</span>
+                        </el-form-item>
+                        <el-form-item label="身份证号">
+                            <span>{{form.identity}}</span>
+                        </el-form-item>
+                        <el-form-item label="邮箱:">
+                            <span>{{form.email}}</span>
+                        </el-form-item>
+                        <el-form-item label="手机号码:">
+                            <span>{{form.phone}}</span>
+                        </el-form-item>
+                        <el-form-item label="出生日期">
+                            <span>{{form.birthday}}</span>
+                        </el-form-item>
+                        <el-form-item label="个人说明">
+                            <span>{{form.signature}}</span>
+                        </el-form-item>
+                        <el-form-item label="住址">
+                            <span>{{form.address}}</span>
+                        </el-form-item>
+                        <el-form-item label="注册时间">
+                            <span>{{form.registrationtime}}</span>
+                        </el-form-item>
+                    </el-form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                    </div>
+            </div>
+        </div>
+    </div>
+    <!--修改-->
+    <div class="modal fade" id="editmessage" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-uppercase" id="exampleModalLongTitle">编辑我的信息</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <el-form ref="form" :model="editform" label-width="80px">
+
+                        <el-form-item label="姓名">
+                            <span>{{editform.uname}}</span>
+                        </el-form-item>
+
+                        <el-form-item label="性别">
+
+                            <el-radio v-model="editform.sex" label="男">男</el-radio>
+                            <el-radio v-model="editform.sex" label="女">女</el-radio>
+
+                        </el-form-item>
+                        <el-form-item label="身份证号">
+                            <el-input v-model="editform.identity"></el-input>
+                        </el-form-item>
+                        <el-form-item label="邮箱">
+                            <el-input v-model="editform.email"></el-input>
+                        </el-form-item>
+                        <el-form-item label="手机号码">
+
+                            <el-input v-model="editform.phone"></el-input>
+                        </el-form-item>
+                        <el-form-item label="出生日期">
+
+                            <el-input v-model="editform.birthday"></el-input>
+                        </el-form-item>
+                        <el-form-item label="个人说明">
+                            <el-input v-model="editform.signature"></el-input>
+                        </el-form-item>
+                        <el-form-item label="住址">
+                            <el-input v-model="editform.address"></el-input>
+                        </el-form-item>
+
+                        <div class="modal-footer">
+                            <el-button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</el-button>
+                            <el-button @click="onSubmit">保存</el-button>
+                        </div>
+                    </el-form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- //Vertically centered Modal -->
+</div>
+<style type="text/css">
+    .el-form-item {
+        height: 20px;
+    }
+</style>
+<script type="text/javascript" src="/js/jquery-2.2.3.min.js"></script>
+<script type="text/javascript" src="/js/bootstrap.js"></script>
+<script src="/js/owl.carousel.js"></script>
+
+<script src="/js/move-top.js"></script>
+<script src="/js/easing.js"></script>
+
+<script>
+    new Vue({
+        el: '#mymessage',
+        data: function () {
+            return {
+                form: {},
+                editform: {
+                    sex: '',
+                    email: '',
+                    identity: '',
+                    phone: '',
+                    birthday: '',
+                    signature: '',
+                    address: ''
+                },
+            };
+        },
+        created() {
+            //getforms();
+            var intid = parseInt($("#userid").val());
+           // var s = {uid: intid};
+            axios.get('/userservice/selectOne', {
+
+                params:{
+                    uid:intid
+                }
+            }).then(req => {
+                this.form = req.data.data;
+                this.editform = req.data.data;
+            })
+        },
+        methods: {
+            onSubmit() {
+                // console.log(this.myform);
+                var intid = parseInt($("#userid").val());
+                // this.myform.uid=intid;
+                this.editform.registrationtime = null;
+
+                axios.post('/userservice/update', JSON.stringify(this.editform), {
+                        headers: {
+                            'Content-Type': 'application/json;charset=UTF-8'
+                        }
+                    }
+                ).then(req => {
+                   // alert("修改成功！");
+                    this.$message({message: '修改成功！', type: 'success'});
+                    // axios.get('/main');
+                    window.location.href = "/main";
+                })
+
+            },
+        }
+    })
+</script>
+
+<script>
+    var uname = $("#uname").val();
+    new Vue({
+        el: '#team',
+        data: function () {
+            return {
+                sou: {
+                    tname: '',
+                    pn: 1
+                },
+                teamdate: [],
+                startPage: 1,
+                // 每页的数据
+                pageSize: 4,
+                total: 0,
+            };
+        },
+        created() {
+            const that = this;
+            that.getforms();
+            that.sousou();
+        },
+        methods: {
+
+            //查询所有团队
+            getforms() {
+                axios.get('/team/pageall', {
+                        params: {
+                            pn: this.startPage
+                        }
+                    },
+                ).then(req => {
+                    console.log(req);
+                    this.teamdate = req.data.data.list;
+                    //分页处理　　
+                    this.total = req.data.data.total;
+                })
+            },
+            // 初始页currentPage、初始每页数据数pagesize和数据data
+            handleSizeChange(size) {
+                this.pageSize = size;
+                this.sousuo()
+            },
+            handleCurrentChange(startPage) {
+                this.sou.pn = startPage;
+                this.startPage = startPage
+                this.sousuo()
+            },
+
+            apply(a){
+                var b = {
+                    tname:a.tname,
+                    uname:uname,
+                    type: "1"
+                }
+                axios.post('/apply/add', JSON.stringify(b), {
+                        headers: {
+                            'Content-Type': 'application/json;charset=UTF-8'
+                        }
+                    }
+                ).then(req => {
+                    console.log(req.data);
+                    if(req.data.code=="1"&&req.data.success==false){
+                      //  alert(req.data.message);
+                        this.$message({message:req.data.message, type: 'error'});
+                        return false;
+                    }
+                    if(req.data.success==false){
+                       // alert(req.data.message);
+                        this.$message({message:req.data.message, type: 'error'});
+                        return false;
+                    }
+                  //  alert("发送申请成功！");
+                    this.$message({message:"发送申请成功！", type: 'success'});
+                    window.location.href = "/userservice/main";
+                })
+            },
+            x(a) {
+                var tname1 = a.tname;
+                axios.get('/team/messageuserservice', {
+                        params:{
+                            tname:tname1
+                        }
+                    }
+                ).then(req => {
+                    window.location.href = "/team/messageBytname?tid=" + req.data.result.tids;
+                })
+
+            },
+            sousuo() {
+                if (this.sou.tname != '') {
+                    axios.post('/team/selectbykey', JSON.stringify(this.sou), {
+                            headers: {
+                                'Content-Type': 'application/json;charset=UTF-8'
+                            }
+                        }
+                    ).then(req => {
+                        this.teamdate = req.data.data.list;
+                        this.total = req.data.data.total;
+                    })
+                } else {
+                    axios.get('/team/pageall', {
+                            params: {
+                                pn: this.startPage
+                            }
+                        },
+                    ).then(req => {
+                        this.teamdate = req.data.data.list;
+                        this.total = req.data.data.total;
+                    })
+                }
+            },
+
+        }
+    })
+</script>
+
+</body>
+</html>

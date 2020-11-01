@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>后台管理主页！！</title>
+    <!-- plugins:css -->
+    <link rel="stylesheet" href="/admins/vendors/iconfonts/mdi/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="/admins/vendors/css/vendor.bundle.base.css">
+    <!-- endinject -->
+    <!-- inject:css -->
+    <link rel="stylesheet" href="/admins/css/style.css">
+    <!-- endinject -->
+    <link rel="shortcut icon" href="/admins/images/favicon.png"/>
+
+    <!--	描述：elm -->
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="https://cdn.staticfile.org/axios/0.18.0/axios.min.js"></script>
+    <script src="base/plugins/jquery/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="base/dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="base/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <link rel="stylesheet" href="css/common.css">
+    <!--elm  -->
+</head>
+<body>
+<div id="a">
+    <div class="container-scroller">
+        <!-- partial:partials/_navbar.html， 页面头设置-->
+        <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row" th:fragment="heand">
+
+            <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+                <!--<a class="navbar-brand brand-logo" href="index.html"><img src="images/logo.svg" alt="logo"/></a>
+                 -->
+                <h5>同城搬家供需管理后台</h5>
+
+            </div>
+            <div class="navbar-menu-wrapper d-flex align-items-stretch">
+                <div class="search-field d-none d-md-block">
+                    <form class="d-flex align-items-center h-100" action="#">
+                        <div class="input-group">
+                            <div class="input-group-prepend bg-transparent">
+                                <i class="input-group-text border-0 mdi mdi-magnify"></i>
+                            </div>
+                            <input type="text" class="form-control bg-transparent border-0" placeholder="">
+                        </div>
+                    </form>
+                </div>
+                <ul class="navbar-nav navbar-nav-right">
+                    <li class="nav-item nav-profile dropdown">
+                        <a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-toggle="dropdown"
+                           aria-expanded="false">
+                            <div class="nav-profile-img">
+                                <img src="/admins/images/faces/face1.jpg" alt="image">
+                                <span class="availability-status online"></span>
+                            </div>
+                            <div class="nav-profile-text">
+                                <p class="mb-1 text-black" th:if="${session.admin} ne null" th:text="${session.admin.aname}"></p>
+                            </div>
+                        </a>
+                        <div class="dropdown-menu navbar-dropdown" aria-labelledby="profileDropdown">
+
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="/">
+                                <i class="mdi mdi-logout mr-2 text-primary"></i>
+                                注销
+                            </a>
+                        </div>
+                    </li>
+
+                </ul>
+                <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
+                        data-toggle="offcanvas">
+                    <span class="mdi mdi-menu"></span>
+                </button>
+            </div>
+        </nav>
+        <!-- partial 一大个page-body-wrapper页面黄色-->
+        <div class="container-fluid page-body-wrapper">
+
+            <!-- partial:partials/_sidebar.html 页面左边目录设置-->
+            <nav class="sidebar sidebar-offcanvas" id="sidebar">
+
+                <ul class="nav">
+                    <li class="nav-item nav-profile">
+                        <a href="#" class="nav-link">
+                            <div class="nav-profile-image">
+                                <img src="/admins/images/faces/face1.jpg" alt="profile">
+                                <span class="login-status online"></span> <!--change to offline or busy as needed-->
+                            </div>
+                            <div class="nav-profile-text d-flex flex-column">
+                                <span class="font-weight-bold mb-2" th:text="${session.admin.aname}"></span>
+                                <span class="text-secondary text-small">管理员</span>
+                            </div>
+                            <i class="mdi mdi-bookmark-check text-success nav-profile-badge"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/main">
+                            <span class="menu-title">首页</span>
+                            <i class="mdi mdi-home menu-icon"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false"
+                           aria-controls="ui-basic">
+                            <span class="menu-title">用户管理</span>
+                            <i class="menu-arrow"></i>
+                            <i class="mdi mdi-crosshairs-gps menu-icon"></i>
+                        </a>
+                        <div class="collapse" id="ui-basic">
+                            <ul class="nav flex-column sub-menu">
+                                <li class="nav-item"><a class="nav-link" href="/admin/user">个人用户列表</a>
+                                </li>
+                                <li class="nav-item"><a class="nav-link"
+                                                        href="/admin/userservice">团队用户列表</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/team">
+                            <span class="menu-title">团队管理</span>
+                            <i class="mdi mdi-contacts menu-icon"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/order">
+                            <span class="menu-title">订单管理</span>
+                            <i class="mdi mdi-format-list-bulleted menu-icon"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/resource">
+                            <span class="menu-title">资源管理</span>
+                            <i class="mdi mdi-chart-bar menu-icon"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/comment">
+                            <span class="menu-title">评论管理</span>
+                            <i class="mdi mdi-table-large menu-icon"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/message">
+                            <span class="menu-title">留言管理</span>
+                            <i class="mdi mdi-table-large menu-icon"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link"  href="/a/notice">
+                            <span class="menu-title">公告管理</span>
+                            <i class="mdi mdi-medical-bag menu-icon"></i>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+
+            <!-- partial 右边设置栏-->
+            <div class="main-panel col-md-12">
+                <div class="content-wrapper col-md-12">
+
+                    <div class="row">
+                        <div class="col-12 grid-margin">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="card-title">订单列表</h4>
+                                 </div>
+                                <el-table
+                                        ref="multipleTable"
+                                        :data="tableData"
+                                        tooltip-effect="dark"
+                                        style="width: 100%"
+                                        @selection-change="handleSelectionChange" class="table">
+
+
+                                    <el-table-column
+                                            fixed
+                                            type="index"
+                                            label="序号"
+                                            width="50">
+
+                                    </el-table-column>
+                                    <el-table-column
+                                            prop="oid"
+                                            label="订单编号"
+                                            width="100">
+                                    </el-table-column>
+                                    <el-table-column
+                                            prop="tname"
+                                            label="团队名称"
+                                            width="120">
+                                    </el-table-column>
+                                    <el-table-column
+                                            prop="mbegin"
+                                            width="120"
+                                            label="搬家起点">
+                                    </el-table-column>
+                                    <el-table-column
+                                            prop="mend"
+                                            label="搬家终点"
+                                            width="120">
+                                    </el-table-column>
+                                    <el-table-column
+                                            prop="mtime"
+                                            label="开始搬家时间"
+                                            width="120">
+                                    </el-table-column>
+                                    <el-table-column
+                                            prop="mattention"
+                                            label="搬家注意事项"
+                                            width="120">
+                                    </el-table-column>
+                                    <el-table-column
+                                            prop="amount"
+                                            label="订单金额(单位：元)"
+                                            width="120">
+                                    </el-table-column>
+                                    <el-table-column
+                                            prop="payfor"
+                                            label="支付方式"
+                                            width="120">
+                                    </el-table-column>
+                                    <el-table-column
+                                            prop="status"
+                                            label="订单状态"
+                                            width="120">
+                                        <template slot-scope="scope">
+                                            <span v-if="scope.row.status=='0'">待接单</span>
+                                            <span v-else-if="scope.row.status=='1'">已接单-待完成</span>
+                                            <span v-else-if="scope.row.status=='2'">已完成</span>
+                                        </template>
+                                    </el-table-column>
+                                    <el-table-column
+                                            prop="createtime"
+                                            label="创建时间"
+                                            width="120">
+                                    </el-table-column>
+                                    <el-table-column
+                                            prop="finshtime"
+                                            label="完成时间"
+                                            width="120">
+                                    </el-table-column>
+                                    <el-table-column
+                                            prop="scoring"
+                                            label="订单平分"
+                                            width="120">
+                                    </el-table-column>
+                                    <el-table-column
+                                            fixed="right"
+                                            label="操作"
+                                            width="120"
+                                    >
+                                        <template slot-scope="scope">
+                                            <el-button @click="editClick(scope.row)" type="text" size="small">编辑
+                                            </el-button>
+                                            <el-button @click="deleteClick(scope.row)" type="text" size="small">删除
+                                            </el-button>
+                                        </template>
+                                    </el-table-column>
+
+                                </el-table>
+                                <!-- 描述：分页操作-->
+                                <div class="pagination" style="padding: 20px;text-align: center;">
+                                    <el-pagination background
+                                                   @current-change="handleCurrentChange"
+                                                   layout="prev, pager, next,total"
+                                                   :current-page="startPage" :prev-text="prev" :next-text="next"
+                                                   :total="total"
+                                                   :page-size="5"
+                                    />
+                                </div>
+                                <!--分页-->
+<!--                                <el-dialog title="修改订单内容" :visible.sync="disruleform">-->
+<!--                                    <el-form :model="ruleForm">-->
+<!--                                        <el-form-item label="订单标题" prop="mtitle">-->
+<!--                                            <el-input v-model="ruleForm.mtitle" ></el-input>-->
+<!--                                        </el-form-item>-->
+<!--                                        <el-form-item label="团队名称" prop="tname">-->
+<!--                                            <el-input  v-model="ruleForm.tname" :readonly="true"></el-input>-->
+<!--                                        </el-form-item>-->
+<!--                                        <el-form-item label="用户名称" prop="uname">-->
+<!--                                            <el-input  v-model="ruleForm.uname" :readonly="true"></el-input>-->
+<!--                                        </el-form-item>-->
+<!--                                        <el-form-item label="搬家起点" prop="mbegin">-->
+<!--                                            <el-input v-model="ruleForm.mbegin"></el-input>-->
+<!--                                        </el-form-item>-->
+<!--                                        <el-form-item label="搬家终点" prop="mend" >-->
+<!--                                            <el-input v-model="ruleForm.mend"></el-input>-->
+<!--                                        </el-form-item>-->
+<!--                                        <el-form-item label="搬家时间" prop="mtime">-->
+<!--                                            <el-date-picker-->
+<!--                                                    v-model="ruleForm.mtime"-->
+<!--                                                    placeholder="选择搬家时间"-->
+<!--                                                    type="date"-->
+<!--                                                    format="yyyy年MM月dd日"-->
+<!--                                                    value-format="yyyy-MM-dd">-->
+<!--                                                >-->
+<!--                                            </el-date-picker>-->
+<!--                                        </el-form-item>-->
+<!--                                        <el-form-item label="搬家注意事项" prop="mattention">-->
+<!--                                            <el-input type="text"  v-model="ruleForm.mattention" style="width: 100%;"></el-input>-->
+<!--                                            &lt;!&ndash;<el-input type="date" v-model="ruleForm.birthday"></el-input>&ndash;&gt;-->
+<!--                                        </el-form-item>-->
+<!--                                        <el-form-item label="订单金额/元" prop="amount">-->
+<!--                                            <el-input v-model="ruleForm.amount"></el-input>-->
+<!--                                        </el-form-item>-->
+<!--                                        <el-form-item label="支付方式"  >-->
+
+<!--                                            <select v-model="ruleForm.payfor" name="payfor" style="font-size: 33px;">-->
+<!--                                                <option id="1" th:value="支付宝付">支付宝付</option>-->
+<!--                                                <option id="2" th:value="微信支付">微信支付</option>-->
+<!--                                                <option id="3" th:value="现金支付">现金支付</option>-->
+<!--                                            </select>-->
+<!--                                            &lt;!&ndash;<el-input v-model="ruleForm.signature"></el-input>&ndash;&gt;-->
+<!--                                        </el-form-item>-->
+<!--                                    </el-form>-->
+<!--                                    <div slot="footer" class="dialog-footer">-->
+<!--                                        <el-button @click="disruleform = false">取 消</el-button>-->
+<!--                                        <el-button type="primary" @click="edit">保 存</el-button>-->
+<!--                                    </div>-->
+<!--                                </el-dialog>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+</div>
+<script src="/admins/vendors/js/vendor.bundle.base.js"></script>
+<script src="/admins/vendors/js/vendor.bundle.addons.js"></script>
+<script src="/admins/js/off-canvas.js"></script>
+<script src="/admins/js/misc.js"></script>
+<script src="/admins/js/dashboard.js"></script>
+
+<script>
+    new Vue({
+        el: '#a',
+        data: function () {
+            return {
+                disruleform: false,
+                startPage: 1,
+                // 每页的数据
+                pageSize: 5,
+                total: 0,
+                tableData: [],
+                multipleSelection: [],
+                // ruleForm: {
+                //     mtitle: '',
+                //     tname: tname,
+                //     mbegin: '',
+                //     mend: '',
+                //     mtime: '',
+                //     mattention: '',
+                //     amount: '',
+                //     payfor: '',
+                //     uname: uname,
+                //     email: '',
+                //     phone: ''
+                // },
+            }
+        },
+        created() {
+            this.handleUserList();
+        },
+        methods: {
+            toggleSelection(rows) {
+                if (rows) {
+                    rows.forEach(row => {
+                        this.$refs.multipleTable.toggleRowSelection(row);
+                    });
+                } else {
+                    this.$refs.multipleTable.clearSelection();
+                }
+            },
+            handleSelectionChange(val) {
+                this.multipleSelection = val;
+            },
+            // 初始页currentPage、初始每页数据数pagesize和数据data
+            handleSizeChange(size) {
+                this.pageSize = size
+                this.handleUserList()
+            },
+            handleCurrentChange(startPage) {
+                this.startPage = startPage
+                this.handleUserList()
+            },
+            handleUserList() {
+
+                axios.get('/order/selectall', {
+                        params: {
+                            pn: this.startPage
+                        }
+                    },
+                ).then(req => {
+                    console.log(req);
+                    this.tableData = req.data.data.list;
+                    //分页处理　　
+                    this.total = req.data.data.total;
+                })
+            },
+            handleCurrentChange(val) {
+                // console.log(`当前页: ${val}`);
+                this.startPage = val;
+                this.handleUserList();
+            },
+            deleteClick(val) {
+                var a = {
+                    oid: val.oid
+                };
+                this.$confirm('是否删除这条数据?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    axios.post('/del', JSON.stringify(a), {
+                            headers: {
+                                'Content-Type': 'application/json;charset=UTF-8'
+                            }
+                        }
+                    ).then(req => {
+                        this.$message({
+                            type: 'success',
+                            message: '删除成功!'
+
+                        });
+                        //window.location.href = "/order";
+                        this.handleUserList();
+                    })
+
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    })
+                })
+            },
+            //编辑、
+            editClick(eidt) {
+                this.disruleform = true;
+              //  this.ruleForm.mtitle = eidt.mtitle;
+                this.ruleForm.tname = eidt.tname;
+                this.ruleForm.mbegin = eidt.mbegin;
+                this.ruleForm.mend = eidt.mend;
+                this.ruleForm.mtime = eidt.mtime;
+                this.ruleForm.mattention = eidt.mattention;
+                this.ruleForm.amount = eidt.amount;
+                this.ruleForm.payfor = eidt.payfor;
+                this.ruleForm.uname = eidt.uname;
+                this.ruleForm.email = eidt.email;
+                this.ruleForm.phone = eidt.phone;
+            },
+        },
+        edit() {
+            axios.post('/order/edit',
+                JSON.stringify(this.ruleForm), {
+                    headers: {
+                        'Content-Type': 'application/json;charset=UTF-8'
+                    }
+                }
+            ).then(req => {
+                this.$message({
+                    type: 'success',
+                    message: '编辑成功!'
+                });
+                this.disruleform = false;
+                this.handleUserList();
+
+            })
+
+    }
+
+    })
+</script>
+
+
+</body>
+
+</html>
